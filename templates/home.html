@@ -1,0 +1,21 @@
+<!DOCTYPE = html>
+<html>
+	
+		{%block title%}<title> Hola! </title>{%endblock title%}
+	<head>  {%block greeting%} {%endblock greeting%}
+		{%set msgs = get_flashed_messages()%}
+		{%for each in msgs %}
+		<h1>{{each}}</h1>
+		<br>
+		{%endfor%}
+	</head>
+	<body>
+		{%block login %}
+		<form action="/login" method="get">
+			Username: <input type = "text" name="usr" ></br>
+			Password: <input type = "text" name="pwd"></br>
+		<input type="submit" value="Submit">
+		{%endblock login%} <br>
+	</body>
+</html>
+

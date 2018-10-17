@@ -1,0 +1,10 @@
+{%extends "home.html"%}
+{%block title%}<title>Welcome</title>{%endblock title%}
+{%block greeting%}
+	    <head>
+	      Hello {{ user }} 
+		</head></br>
+{%endblock greeting%}
+{%block login%}
+		<a href = '/logout'><input type = "button" value="logout"></input></a>
+{%endblock login%}
