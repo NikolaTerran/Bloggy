@@ -1,7 +1,7 @@
 <!DOCTYPE = html>
 <html>
 	
-		{%block title%}<title> Hola! </title>{%endblock title%}
+		{%block title%}<title> Welcome to Buggy Blogger! </title>{%endblock title%}
 	<head>  {%block greeting%} {%endblock greeting%}
 		{%set msgs = get_flashed_messages()%}
 		{%for each in msgs %}
@@ -11,11 +11,23 @@
 	</head>
 	<body>
 		{%block login %}
+		<h3>Welcome to Buggy Bloggers!</h3>
+		<h3>To view/edit blogs, please login.</h3>
 		<form action="/login" method="get">
 			Username: <input type = "text" name="usr" ></br>
 			Password: <input type = "text" name="pwd"></br>
 		<input type="submit" value="Submit">
 		{%endblock login%} <br>
+		
+		{%block register %}
+		<h3>New User? Smash that register button!</h3>
+		<form action="/register">
+			<input type="button" value="register"></br>
+		{% endblock register %}
+		
 	</body>
+	<footer>
+		<p>&copyBuggy Blogger Developers
+	</footer>
 </html>
 
