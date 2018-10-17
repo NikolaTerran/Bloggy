@@ -23,7 +23,13 @@ cathyC 2018-10-16: 8:00
    Added images depicting what pages and posts would look like;
    Expanded on task list, made clearer what everybody's responsibilities would be
 ==============================================================================================================================
-  11:57 Notes from “Programming Sucks”
+cathyC 2018-10-17: 12:22
+------------------------------------------------------------------------------------------------------------------------------
+  Changed edit blog diagram in design doc
+  You can click on your blog and see posts and also have options to edit it
+  Came to consensus about how posts will be updated-input text into textboxes OR upload own html file
+==============================================================================================================================
+11:57 Notes from “Programming Sucks”
 	1. Plan the structure of the code ahead of time to avoid redundancy
 	2. Clear note all bugs for the next programmer
 	3. Write good code that can last
