@@ -1,2 +1,7 @@
 10/15/18:
   12:24 renamed repo from wiki to bloggy
+10/16/18:
+  7:45 Denoted where user is taken after making account in component map
+  7:50 Erased site map arrow for scenario when user isn't logged in (user must be logged in to use site)
+  8:00 Added images depicting what pages and posts would look like
+  8:04 Expanded on task list, made clearer what everybody's responsibilities would be
