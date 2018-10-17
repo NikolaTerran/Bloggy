@@ -1,0 +1,39 @@
+BuggyBloggers
+Member Damian Wasilewicz
+Member Cathy Cai
+Member Jeffrey Wu
+Member Tianrun Liu
+pd 6
+------------------------------------------------------------------------------------------------------------------------------
+Blog/A Website allowing signed in users to view posts on blogs and contribute their posts to their own blogs
+tianrunL 2018-10-15 12:24 
+------------------------------------------------------------------------------------------------------------------------------
+renamed repo from wiki to bloggy
+==============================================================================================================================
+damianW 2018-10-16: 7:45
+------------------------------------------------------------------------------------------------------------------------------
+Denoted where user is taken after making account in component map
+==============================================================================================================================
+damianW 2018-10-16: 7:51
+------------------------------------------------------------------------------------------------------------------------------
+Erased site map arrow for scenario when user isn't logged in (user must be logged in to use site)
+==============================================================================================================================
+cathyC 2018-10-16: 8:00
+------------------------------------------------------------------------------------------------------------------------------
+   Added images depicting what pages and posts would look like;
+   Expanded on task list, made clearer what everybody's responsibilities would be
+==============================================================================================================================
+cathyC 2018-10-17: 12:22
+------------------------------------------------------------------------------------------------------------------------------
+  Changed edit blog diagram in design doc
+  You can click on your blog and see posts and also have options to edit it
+  Came to consensus about how posts will be updated-input text into textboxes OR upload own html file
+==============================================================================================================================
+tianrunL 2018-10-17: 12:23
+------------------------------------------------------------------------------------------------------------------------------
+  Created backbone files, folders for project
+==============================================================================================================================
+11:57 Notes from “Programming Sucks”
+	1. Plan the structure of the code ahead of time to avoid redundancy
+	2. Clear note all bugs for the next programmer
+	3. Write good code that can last
