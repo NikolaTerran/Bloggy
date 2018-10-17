@@ -1,2 +1,8 @@
-10/15/18:
-  12:24 renamed repo from wiki to bloggy
+2018-10-15:
+   12:24 renamed repo from wiki to bloggy
+
+2018-10-16:
+   Notes from “Programming Sucks”
+	1. Plan the structure of the code ahead of time to avoid redundancy
+	2. Clear note all bugs for the next programmer
+	3. Write good code that can last
