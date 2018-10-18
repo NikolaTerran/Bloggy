@@ -47,3 +47,8 @@ tianrunL 2018-10-17: 12:23
 	1. Plan the structure of the code ahead of time to avoid redundancy
 	2. Clear note all bugs for the next programmer, stress communication
 	3. Write good code that can last
+
+tianrunL 2018-10-17: 12:23
+------------------------------------------------------------------------------------------------------------------------------
+  added edit module, but it can't store anything right now.
+==============================================================================================================================
