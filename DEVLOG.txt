@@ -34,6 +34,7 @@ tianrunL 2018-10-17: 12:23
   Created backbone files, folders for project
 ==============================================================================================================================
 11:57 Notes from “Programming Sucks”
+	Through the author's amusing, beautifully cynical rant, we actually were able to learn quite a couple of valuable things. The brief glimpse into the hectic life of real devos persuaded us to stress communicating and working together in an organized manner, because alone we will struggle and suffer a lot more than if we split the burden.
 	1. Plan the structure of the code ahead of time to avoid redundancy
-	2. Clear note all bugs for the next programmer
+	2. Clear note all bugs for the next programmer, stress communication
 	3. Write good code that can last
