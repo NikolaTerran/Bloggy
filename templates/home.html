@@ -17,14 +17,15 @@
 			Username: <input type = "text" name="usr" ></br>
 			Password: <input type = "text" name="pwd"></br>
 		<input type="submit" value="Submit">
-		{%endblock login%} <br>
+		 <br>
 		
-		{%block register %}
 		<h3>New User? Smash that register button!</h3>
 		<form action="/register">
 			<input type="button" value="register"></br>
-		{% endblock register %}
+		{% endblock login %}
 		
+		{%block edit%}
+		{%endblock edit%}
 	</body>
 	<footer>
 		<p>&copyBuggy Blogger Developers

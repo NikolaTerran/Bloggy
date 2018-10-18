@@ -1,3 +1,7 @@
+
+
+
+
 {%extends "home.html"%}
 {%block title%}<title>Welcome</title>{%endblock title%}
 {%block greeting%}
@@ -8,3 +12,8 @@
 {%block login%}
 		<a href = '/logout'><input type = "button" value="logout"></input></a>
 {%endblock login%}
+{%block edit %}
+<h3>click the botton to add blog</h3>
+<a href = '/edit'><input type = "button" value="woo"></input></a>
+{%endblock edit%}
+

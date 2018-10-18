@@ -34,6 +34,14 @@ def logout():
     session.pop('username',"Alan Smith")
     return redirect(url_for('home'))
 
+#edit stuff interface
+#don't know how to add those stuff to database
+@app.route('/edit')
+def edit():
+	if "username" in session:
+		return render_template('edit.html',user = session['username'])
+	else:
+		return redirect(url_for('home'))
 	
 if __name__ == "__main__":
     app.run(debug=True)
