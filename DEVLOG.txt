@@ -64,4 +64,9 @@ damianW 2018-10-18: 22:09
 damianW 2018-10-19: 12:35
 ------------------------------------------------------------------------------------------------------------------------------
  Worked on making default profile page so user doesn't have to make a blog to see profile page
+=======
+tianrunL 2018-10-18: 12:36
+------------------------------------------------------------------------------------------------------------------------------
+  added register.html to templates, register route and register() to app.py. tweaked with data base functionality. register module still need more work on it
+
 ==============================================================================================================================

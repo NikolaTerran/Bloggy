@@ -5,6 +5,8 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(8)
 
+
+
 @app.route('/')
 def home():
     #checks if there is a session
@@ -43,6 +45,7 @@ def edit():
 		return render_template('edit.html',user = session['username'])
 	else:
 		return redirect(url_for('home'))
+
 ##displays user's homepage, which shows the blog that was just created
 @app.route('/username')
 def profile():
@@ -50,6 +53,7 @@ def profile():
     head = request.args['heading']
     blogposts = request.args['blogposts']
     return render_template('profile.html', username = user, heading = head, blogs = blogposts)
+
 
 #@app.route('/usernamedf')
 #def profile():
@@ -59,6 +63,47 @@ def profile():
     #return render_template('profile.html', username = user, heading = defaultheading, blogs = defaultpost)
 
 
+#enter user's info to database
+@app.route('/register')
+def register():
+	#if(request.args['usr'] != NULL): 
+	#	db = sqlite3.connect("user_data.db")
+	#	c = db.cursor()   
+	#	file = open('data/data.csv')
+	#	command = "CREATE TABLE users(name TEXT,password TEXT,id INTEGER)"
+	#	c.execute(command)
+	#	command2 = 'INSERT INTO users VALUES(?,?,?)'
+	#	c.execute(command,(request.args['usr'],request.args['pwd'],0))
+	#	return render_template('home.html')
+	#else:
+		return render_template('register.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
