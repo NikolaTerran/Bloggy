@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 import os
 
+
 app = Flask(__name__)
 app.secret_key = os.urandom(8)
 
@@ -16,12 +17,12 @@ def home():
 
 @app.route('/login')
 def login():
-    #Login: Alan Smith PW: password12345678, checks if it is correct
-    if request.args['usr'] == 'Alan Smith' and request.args['pwd']=='password12345678':
+    #Login: Alan Smith PW: password, checks if it is correct
+    if request.args['usr'] == 'Alan Smith' and request.args['pwd']=='password':
         session['username'] = "Alan Smith"
         return redirect(url_for('home'))
     # if either is wrong then it returns an error message
-    elif request.args['usr'] == 'Alan Smith' and request.args['pwd']!='password12345678':
+    elif request.args['usr'] == 'Alan Smith' and request.args['pwd']!='password':
         flash("password wrong")
         return render_template('home.html')
     else:
@@ -45,10 +46,17 @@ def edit():
 ##displays user's homepage, which shows the blog that was just created
 @app.route('/username')
 def profile():
-    user = "Alan Smith"
+    user = session.get('username')
     head = request.args['heading']
     blogposts = request.args['blogposts']
     return render_template('profile.html', username = user, heading = head, blogs = blogposts)
+
+#@app.route('/usernamedf')
+#def profile():
+   # user = session.get('username')
+   # defaultheading = 'Blog'
+    #defaultpost = 'Information about cool stuff'
+    #return render_template('profile.html', username = user, heading = defaultheading, blogs = defaultpost)
 
 
 
