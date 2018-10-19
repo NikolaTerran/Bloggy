@@ -61,3 +61,7 @@ damianW 2018-10-18: 22:09
   added profile.html and linked edit page and profile page;
   inserting text will create new blog and send you to profile page where blog is visible
 ==============================================================================================================================
+damianW 2018-10-19: 12:35
+------------------------------------------------------------------------------------------------------------------------------
+ Worked on making default profile page so user doesn't have to make a blog to see profile page
+==============================================================================================================================
