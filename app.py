@@ -42,6 +42,17 @@ def edit():
 		return render_template('edit.html',user = session['username'])
 	else:
 		return redirect(url_for('home'))
-	
+
+@app.route('/username')
+def profile():
+    user = "Alan Smith"
+    blogposts = [
+        {'author': user, 'body': 'Test post #1'},
+        {'author': user, 'body': 'Test post #2'}
+    ]
+    return render_template('profile.html', username = user, blogs = blogposts)
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
