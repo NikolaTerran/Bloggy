@@ -42,15 +42,13 @@ def edit():
 		return render_template('edit.html',user = session['username'])
 	else:
 		return redirect(url_for('home'))
-
+##displays user's homepage, which shows the blog that was just created
 @app.route('/username')
 def profile():
     user = "Alan Smith"
-    blogposts = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
-    ]
-    return render_template('profile.html', username = user, blogs = blogposts)
+    head = request.args['heading']
+    blogposts = request.args['blogposts']
+    return render_template('profile.html', username = user, heading = head, blogs = blogposts)
 
 
 

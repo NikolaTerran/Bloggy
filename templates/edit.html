@@ -2,16 +2,16 @@
 {%block title%}<title>Edit your own buggy blog!</title>{%endblock title%}
 {%block greeting%}
 	    <head>
-	      Hello {{ user }} 
+	      Hello {{ user }}
 		</head></br>
 {%endblock greeting%}
 {%block login%}
 {%endblock login%}
 {%block edit%}
-	<form action="/edit">
-	<textarea name="message" rows="10" cols="30">Enter your stuff here</textarea>
+	<form action="/username" method = "GET">
+	Blog heading: <input type = "text" name="heading" ></br>
+	<textarea name="blogposts" rows="10" cols="30">Enter your stuff here</textarea>
   	<br>
   	<input type="submit">
 </form>
 {%endblock edit%}
-
