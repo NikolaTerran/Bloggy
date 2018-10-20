@@ -1,33 +1,43 @@
 <!DOCTYPE = html>
 <html>
-	
-		{%block title%}<title> Welcome to Buggy Blogger! </title>{%endblock title%}
-	<head>  {%block greeting%} {%endblock greeting%}
-		{%set msgs = get_flashed_messages()%}
-		{%for each in msgs %}
-		<h1>{{each}}</h1>
-		<br>
-		{%endfor%}
+		<title>
+			{%block title%}
+				Welcome to Buggy Blogger!
+			{%endblock title%}
+		</title>
+	<head>
+		{%block greeting%}
+			{%set msgs = get_flashed_messages()%}
+			{%for each in msgs %}
+			<h1>{{each}}</h1>
+			<br>
+			{%endfor%}
+		{%endblock greeting%}
 	</head>
 	<body>
 		{%block login %}
 		<h3>Welcome to Buggy Bloggers!</h3>
 		<h3>To view/edit blogs, please login.</h3>
-		<form action="/login" method="get">
+		<form action="/login" method="POST">
 			Username: <input type = "text" name="usr" ></br>
 			Password: <input type = "text" name="pwd"></br>
-		<input type="submit" value="Submit">
+			<input type="submit" value="Submit">
+		</form>
 		{%endblock login%} <br>
-		
-		{%block register %}
+
 		<h3>New User? Smash that register button!</h3>
-		<form action="/register">
-			<input type="button" value="register"></br>
+		{%block register%}
+			<form action="/register" method="POST">
+				Email: <input type = "text" name="email" ></br>
+				Username: <input type = "text" name="new_usr" ></br>
+				Password: <input type = "text" name="new_pwd"></br>
+				Re-enter Password: <input type = "text" name="re_pwd"></br>
+				<input type="submit" value="Register">
+			</form>
 		{% endblock register %}
-		
+
 	</body>
 	<footer>
 		<p>&copyBuggy Blogger Developers
 	</footer>
 </html>
-
