@@ -14,9 +14,6 @@ c = db.cursor()               #facilitate db ops
 
 ##command = "CREATE TABLE registration(username TEXT,password TEXT,email TEXT)"
 ##c.execute(command)    #run SQL statement
-=======
-
->>>>>>> 419efe9e3a426077726758b08680ccfaff87347e
 
 @app.route('/')
 def home():
