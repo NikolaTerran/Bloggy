@@ -6,6 +6,7 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(8)
 
+<<<<<<< HEAD
 DB_FILE="bloggers.db"
 
 db = sqlite3.connect("bloggers.db",check_same_thread=False) #open if file exists, otherwise create
@@ -13,13 +14,18 @@ c = db.cursor()               #facilitate db ops
 
 ##command = "CREATE TABLE registration(username TEXT,password TEXT,email TEXT)"
 ##c.execute(command)    #run SQL statement
+=======
+
+>>>>>>> 419efe9e3a426077726758b08680ccfaff87347e
 
 @app.route('/')
 def home():
-    #checks if there is a session
+    
     command3 = 'SELECT * FROM registration'
     c.execute(command3)
     print(c.fetchall())
+    
+    #checks if there is a session
     if 'user' in session:
         #if there is then just show the welcome screen
         print('user in!')
@@ -48,6 +54,8 @@ def login():
         flash("username wrong")
         return render_template('home.html')
 
+##BUG: Database doesn't hold onto username and password upon refresh
+
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     password = request.form['new_pwd']
@@ -66,6 +74,73 @@ def logout():
     session.pop('user')
     return redirect(url_for('home'))
 
-	
+#edit stuff interface
+#don't know how to add those stuff to database
+@app.route('/edit')
+def edit():
+	if "username" in session:
+		return render_template('edit.html',user = session['username'])
+	else:
+		return redirect(url_for('home'))
+
+##displays user's homepage, which shows the blog that was just created
+@app.route('/username')
+def profile():
+    user = session.get('username')
+    head = request.args['heading']
+    blogposts = request.args['blogposts']
+    return render_template('profile.html', username = user, heading = head, blogs = blogposts)
+
+
+#@app.route('/usernamedf')
+#def profile():
+   # user = session.get('username')
+   # defaultheading = 'Blog'
+    #defaultpost = 'Information about cool stuff'
+    #return render_template('profile.html', username = user, heading = defaultheading, blogs = defaultpost)
+
+
+###enter user's info to database
+##@app.route('/register')
+##def register():
+##	#if(request.args['usr'] != NULL): 
+##	#	db = sqlite3.connect("user_data.db")
+##	#	c = db.cursor()   
+##	#	file = open('data/data.csv')
+##	#	command = "CREATE TABLE users(name TEXT,password TEXT,id INTEGER)"
+##	#	c.execute(command)
+##	#	command2 = 'INSERT INTO users VALUES(?,?,?)'
+##	#	c.execute(command,(request.args['usr'],request.args['pwd'],0))
+##	#	return render_template('home.html')
+##	#else:
+##		return render_template('register.html')
+
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

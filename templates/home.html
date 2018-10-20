@@ -1,5 +1,6 @@
 <!DOCTYPE = html>
 <html>
+<<<<<<< HEAD
 		<title>
 			{%block title%}
 				Welcome to Buggy Blogger!
@@ -13,6 +14,16 @@
 			<br>
 			{%endfor%}
 		{%endblock greeting%}
+=======
+
+		{%block title%}<title> Welcome to Buggy Blogger! </title>{%endblock title%}
+	<head>  {%block greeting%} {%endblock greeting%}
+		{%set msgs = get_flashed_messages()%}
+		{%for each in msgs %}
+		<h1>{{each}}</h1>
+		<br>
+		{%endfor%}
+>>>>>>> 419efe9e3a426077726758b08680ccfaff87347e
 	</head>
 	<body>
 		{%block login %}
@@ -21,6 +32,7 @@
 		<form action="/login" method="POST">
 			Username: <input type = "text" name="usr" ></br>
 			Password: <input type = "text" name="pwd"></br>
+<<<<<<< HEAD
 			<input type="submit" value="Submit">
 		</form>
 		{%endblock login%} <br>
@@ -36,8 +48,22 @@
 			</form>
 		{% endblock register %}
 
+=======
+		<input type="submit" value="Submit">
+		 <br>
+
+		<h3>New User? Smash that register button!</h3>
+		<a heref="edit.html">
+			<input type="button" value="register" ></br>
+		{% endblock login %}
+
+		{%block edit%}
+		{%endblock edit%}
+>>>>>>> 419efe9e3a426077726758b08680ccfaff87347e
 	</body>
+		{%block footer%}
 	<footer>
 		<p>&copyBuggy Blogger Developers
 	</footer>
+		{%endblock footer%}
 </html>
