@@ -74,8 +74,8 @@ def logout():
 #don't know how to add those stuff to database
 @app.route('/edit')
 def edit():
-	if "username" in session:
-		return render_template('edit.html',user = session['username'])
+	if 'user' in session:
+		return render_template('edit.html',user = session['user'])
 	else:
 		return redirect(url_for('home'))
 
