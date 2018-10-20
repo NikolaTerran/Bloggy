@@ -6,7 +6,6 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(8)
 
-<<<<<<< HEAD
 DB_FILE="bloggers.db"
 
 db = sqlite3.connect("bloggers.db",check_same_thread=False) #open if file exists, otherwise create
