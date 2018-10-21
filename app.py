@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash
+import db_builder
+import populateDB
 from passlib.hash import sha256_crypt
 import sqlite3
 import os
@@ -59,14 +61,26 @@ def register():
     command2 = 'INSERT INTO registration VALUES("' + username + '", "' + password  + '", "' + request.form['email'] + '")'
     c.execute(command2)
     session['user'] = username
+    print ('session')
+    print (session)
     command3 = 'SELECT * FROM registration'
     c.execute(command3)
     print(c.fetchall())
+
+    ##this is all hard coded
+
+    #adds this blogger in!
+##    populateDB.insert('users', ['pfp', 'password', 4])
+
+    #adds this blogger's first blog in!
+##    populateDB.insert('blogs', [4, 'blog1', 4, '1, 2, 3'])
     return redirect(url_for('home'))
 
 @app.route('/logout')
 def logout():
     #removes current session
+    print ('logout...')
+    print (session)
     session.pop('user')
     return redirect(url_for('home'))
 
@@ -80,13 +94,24 @@ def edit():
 		return redirect(url_for('home'))
 
 ##displays user's homepage, which shows the blog that was just created
-@app.route('/username')
-def profile():
-    user = session.get('username')
-##    head = request.args['heading']
-##    blogposts = request.args['blogposts']
+@app.route('/submit', methods=['POST', 'GET'])
+def submit():
+    user = session['user']
+    head = request.form['heading']
+    blogposts = request.form['blogposts']
+    print ('inserting...')
+##    populateDB.insert('posts', ['2018-01-01 10:00:00', blogposts, 0, 0, 0])
+    print ('inserted!')
 ##    return render_template('profile.html', username = user, heading = head, blogs = blogposts)
-    return render_template('profile.html', username = user)
+    return redirect(url_for('profile'))
+
+@app.route('/profile')
+def profile():
+    user = session['user']
+    print ('profile')
+    posts = populateDB.findInfo('posts', 3)
+    print (posts)
+    return render_template('profile.html', username = user, posts=posts)
 
 
 #@app.route('/usernamedf')

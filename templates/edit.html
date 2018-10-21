@@ -7,17 +7,17 @@
 	{%block edit%}
 	<b>Your Posts</b>
 	<!-- display all posts with edit options -->
-		<form action="/username" method = "GET">
+		<form action="/submit" method = "POST">
 			Blog heading: </br>
 			<textarea name="blogposts" rows="10" cols="30">What you originally wrote</textarea>
 			<br>
 			<input type="submit">
 		</form>
-	{%endblock edit%}<br>
+	{%endblock edit%}
 
 	{%block add%}
 	<b>Add a post</b>
-		<form action="/username" method = "GET">
+		<form action="/submit" method = "POST">
 			Blog heading: <input type = "text" name="heading" ></br>
 			<textarea name="blogposts" rows="10" cols="30">Enter your stuff here</textarea>
   		<br>

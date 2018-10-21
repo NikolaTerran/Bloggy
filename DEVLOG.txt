@@ -80,3 +80,9 @@ cathyC 2018-10-21: 00:07
   Added feature to edit old posts to edit.html
   Added categories to welcome page
 ==============================================================================================================================
+cathyC 2018-10-21: 02:42
+------------------------------------------------------------------------------------------------------------------------------
+  Hard coded for one user to populate the blog and post tables, and for the posts to show up on the user’s profile
+  Function to find blog/post by author/ownerID
+  Some problems with session holding onto user login info
+==============================================================================================================================
