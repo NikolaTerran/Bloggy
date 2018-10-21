@@ -83,9 +83,10 @@ def edit():
 @app.route('/username')
 def profile():
     user = session.get('username')
-    head = request.args['heading']
-    blogposts = request.args['blogposts']
-    return render_template('profile.html', username = user, heading = head, blogs = blogposts)
+##    head = request.args['heading']
+##    blogposts = request.args['blogposts']
+##    return render_template('profile.html', username = user, heading = head, blogs = blogposts)
+    return render_template('profile.html', username = user)
 
 
 #@app.route('/usernamedf')

@@ -1,19 +1,27 @@
-{%extends "home.html"%}
-{%block title%}<title>Edit your own buggy blog!</title>{%endblock title%}
-{%block greeting%}
-	    <head>
-	      Hello {{ user }}
-		</head></br>
-{%endblock greeting%}
-{%block login%}
-{%endblock login%}
-{}%block register%}
-{%endblock register%}
-{%block edit%}
-	<form action="/username" method = "GET">
-	Blog heading: <input type = "text" name="heading" ></br>
-	<textarea name="blogposts" rows="10" cols="30">Enter your stuff here</textarea>
-  	<br>
-  	<input type="submit">
-</form>
-{%endblock edit%}
+<!DOCTYPE = html>
+<html>
+	{%block title%}<title>Edit your own buggy blog!</title>{%endblock title%}
+
+	{%block header%}<b><h3>Edit your own buggy blog!</h3></b>{%endblock header%}
+
+	{%block edit%}
+	<b>Your Posts</b>
+	<!-- display all posts with edit options -->
+		<form action="/username" method = "GET">
+			Blog heading: </br>
+			<textarea name="blogposts" rows="10" cols="30">What you originally wrote</textarea>
+			<br>
+			<input type="submit">
+		</form>
+	{%endblock edit%}<br>
+
+	{%block add%}
+	<b>Add a post</b>
+		<form action="/username" method = "GET">
+			Blog heading: <input type = "text" name="heading" ></br>
+			<textarea name="blogposts" rows="10" cols="30">Enter your stuff here</textarea>
+  		<br>
+  		<input type="submit" value="Post!">
+		</form>
+	{%endblock add%}
+</html>
