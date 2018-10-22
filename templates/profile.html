@@ -1,29 +1,8 @@
 <!DOCTYPE html>
 <html>
 <h1> Welcome to {{username}}'s page!
-  <br>
-  <br>
-  Cathy's blogs:</h1>
-<br>
-<br>
+  <h1>{{username}}'s Blogs:</h1>
   <table border="2">
-    <tr>
-      <th>{{heading}}</th>
-    </tr>
-    <tr>
-      <td>{{blogs}}</td>
-    </tr>
-  </table><br><br>
-
-  <h1>Cathy's posts:</h1>
-<br>
-<br>
-  <table border="2">
-
-  {% for post in posts %}
-    <i>{{each}}</i>
-    <br><br>
-    {% endfor %}
   <tr>
       <th>{{heading}}</th>
     </tr>
@@ -31,5 +10,4 @@
       <td>{{blogs}}</td>
     </tr>
   </table>
-
 </html>

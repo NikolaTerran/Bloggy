@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash
-import db_builder
+#import db_builder
 import populateDB
 from passlib.hash import sha256_crypt
 import sqlite3
@@ -8,21 +8,14 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(8)
 
-DB_FILE="bloggers.db"
-
-db = sqlite3.connect("bloggers.db",check_same_thread=False) #open if file exists, otherwise create
-c = db.cursor()               #facilitate db ops
 
 ##command = "CREATE TABLE registration(username TEXT,password TEXT,email TEXT)"
 ##c.execute(command)    #run SQL statement
 
 @app.route('/')
 def home():
-    
-    command3 = 'SELECT * FROM registration'
-    c.execute(command3)
-    print(c.fetchall())
-    
+
+
     #checks if there is a session
     if 'user' in session:
         #if there is then just show the welcome screen
@@ -58,15 +51,11 @@ def login():
 def register():
     password = request.form['new_pwd']
     username= request.form['new_usr']
-    command2 = 'INSERT INTO registration VALUES("' + username + '", "' + password  + '", "' + request.form['email'] + '")'
-    c.execute(command2)
+#   command2 = 'INSERT INTO registration VALUES("' + username + '", "' + password  + '", "' + request.form['email'] + '")'
+#   c.execute(command2)
+    populateDB.insert('users', ['profilepic', username, password])
     session['user'] = username
-    print ('session')
-    print (session)
-    command3 = 'SELECT * FROM registration'
-    c.execute(command3)
-    print(c.fetchall())
-
+    populateDB.findInfo('users', 1)
     ##this is all hard coded
 
     #adds this blogger in!
@@ -94,15 +83,21 @@ def edit():
 		return redirect(url_for('home'))
 
 ##displays user's homepage, which shows the blog that was just created
-@app.route('/submit', methods=['POST', 'GET'])
+app.route('/submit', methods=['POST', 'GET'])
 def submit():
     user = session['user']
-    head = request.form['heading']
-    blogposts = request.form['blogposts']
-    print ('inserting...')
-##    populateDB.insert('posts', ['2018-01-01 10:00:00', blogposts, 0, 0, 0])
-    print ('inserted!')
-##    return render_template('profile.html', username = user, heading = head, blogs = blogposts)
+    head = request.form['blogTitle']
+    des = request.form['blogDes']
+    html_str = """
+    <table border="2">
+        <tr>
+            <th>{{head}}</th>
+        </tr>
+        <tr>
+            <td>{{des}}</td>
+        </tr>
+    </table>
+    """
     return redirect(url_for('profile'))
 
 @app.route('/profile')
@@ -125,9 +120,9 @@ def profile():
 ###enter user's info to database
 ##@app.route('/register')
 ##def register():
-##	#if(request.args['usr'] != NULL): 
+##	#if(request.args['usr'] != NULL):
 ##	#	db = sqlite3.connect("user_data.db")
-##	#	c = db.cursor()   
+##	#	c = db.cursor()
 ##	#	file = open('data/data.csv')
 ##	#	command = "CREATE TABLE users(name TEXT,password TEXT,id INTEGER)"
 ##	#	c.execute(command)
@@ -139,30 +134,3 @@ def profile():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

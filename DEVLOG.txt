@@ -91,3 +91,8 @@ cathyC 2018-10-21: 02:42
   Function to find blog/post by author/ownerID
   Some problems with session holding onto user login info
 ==============================================================================================================================
+damianW and jeffreyW 2018-10-21: 11:10
+------------------------------------------------------------------------------------------------------------------------------
+  Worked on fixing registration, retaining info in between logouts
+  worked on fixing databases and creating blog files
+==============================================================================================================================

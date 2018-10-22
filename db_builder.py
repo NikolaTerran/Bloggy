@@ -24,13 +24,13 @@ def closeDB ():
 	db.commit() #save changes
 	db.close()  #close database
 
-##usersHeader = {"UserID":"INTEGER PRIMARY KEY","PFP":"TEXT","Username":"TEXT UNIQUE", "Password":"TEXT"}
-##createTable("users", usersHeader)
-##
-##postsHeader = {"PostID": "INTEGER PRIMARY KEY", "BlogId": "INTEGER", "AuthorID": "INTEGER", "Content":"TEXT", "Timestamp":"DATETIME", "VOTES":"INTEGER"}
-##createTable( "posts", postsHeader)
-##
-##blogsHeader = {"BlogID":"INTEGER PRIMARY KEY", "OwnerID":"INTEGER", "CollaboratorIDs":"TEXT","BlogName":"TEXT", "Category":"TEXT"}
-##createTable("blogs", blogsHeader)
+usersHeader = {"UserID":"INTEGER PRIMARY KEY","PFP":"TEXT","Username":"TEXT UNIQUE", "Password":"TEXT"}
+createTable("users", usersHeader)
+
+postsHeader = {"PostID": "INTEGER PRIMARY KEY", "BlogId": "INTEGER", "AuthorID": "INTEGER", "Content":"TEXT", "Timestamp":"DATETIME", "VOTES":"INTEGER"}
+createTable( "posts", postsHeader)
+
+blogsHeader = {"BlogID":"INTEGER PRIMARY KEY", "OwnerID":"INTEGER", "CollaboratorIDs":"TEXT","BlogName":"TEXT", "Category":"TEXT"}
+createTable("blogs", blogsHeader)
 
 closeDB()

@@ -1,0 +1,14 @@
+<!DOCTYPE = html>
+<html>
+	{%block title%}<title>Create a new blog!</title>{%endblock title%}
+
+	{%block header%}<b><h3>Create a new blog!</h3></b>{%endblock header%}
+  {%block add%}
+		<form action="/Create" method = "POST">
+			Blog Title: <input type = "text" name="blogTitle" ></br>
+			<textarea name="blogDes" rows="10" cols="30">Enter your stuff here</textarea>
+  		<br>
+  		<input type="submit" value="Create">
+		</form>
+	{%endblock add%}
+</html>
