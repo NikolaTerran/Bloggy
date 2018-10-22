@@ -14,8 +14,6 @@ app.secret_key = os.urandom(8)
 
 @app.route('/')
 def home():
-
-
     #checks if there is a session
     if 'user' in session:
         #if there is then just show the welcome screen
@@ -29,13 +27,11 @@ def home():
 def login():
     username = request.form['usr']
     password = request.form['pwd']
-    command4 = "SELECT password FROM registration WHERE username = '" + username + "'"
-    c.execute(command4)
-    user_exists = c.fetchone()
+    user_exists = populateDB.findInfo('users', username, 2)
     print ('user_exists')
     print (user_exists)
     if user_exists:
-        if user_exists[0] == password:
+        if user_exists[3] == password:
             session['user'] = username
             return redirect(url_for('home'))
         else:
@@ -53,9 +49,11 @@ def register():
     username= request.form['new_usr']
 #   command2 = 'INSERT INTO registration VALUES("' + username + '", "' + password  + '", "' + request.form['email'] + '")'
 #   c.execute(command2)
-    populateDB.insert('users', ['profilepic', username, password])
+    try:
+        populateDB.insert('users', ['profilepic', username, password])
+    except:  # as e syntax added in ~python2.5
+        print("caught!") #BUG GOT TO FIX THIS FOR UNIQUE USERNAME
     session['user'] = username
-    populateDB.findInfo('users', 1)
     ##this is all hard coded
 
     #adds this blogger in!
@@ -104,8 +102,8 @@ def submit():
 def profile():
     user = session['user']
     print ('profile')
-    posts = populateDB.findInfo('posts', 3)
-    print (posts)
+    # posts = populateDB.findInfo('posts', 3)
+    # print (posts)
     return render_template('profile.html', username = user, posts=posts)
 
 

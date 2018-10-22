@@ -96,3 +96,8 @@ damianW and jeffreyW 2018-10-21: 11:10
   Worked on fixing registration, retaining info in between logouts
   worked on fixing databases and creating blog files
 ==============================================================================================================================
+jeffreyW 2018-10-21: 12:43
+------------------------------------------------------------------------------------------------------------------------------
+  Fixed registration and login compatible with database files
+  Addressed unique user issue
+==============================================================================================================================
