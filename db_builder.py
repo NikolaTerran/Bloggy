@@ -4,11 +4,10 @@ import sqlite3   #enable control of an sqlite database
 
 DB_FILE="blogs.db"
 
-db = sqlite3.connect(DB_FILE, check_same_thread=False) #open if file exists, otherwise create
-c = db.cursor()               #facilitate db ops
-
 
 def createTable(tableName, fieldNames):
+	db = sqlite3.connect(DB_FILE, check_same_thread=False) #open if file exists, otherwise create
+	c = db.cursor()               #facilitate db ops
 	commandArgs = "("
 	colTypes = []
 	for name in fieldNames:
@@ -19,6 +18,7 @@ def createTable(tableName, fieldNames):
 	commandArgs += ")"
 	# print ("CREATE TABLE " + tableName + " "+ commandArgs)
 	c.execute("CREATE TABLE " + tableName + " "+ commandArgs)
+	closeDB()
 
 def closeDB ():
 	db.commit() #save changes
@@ -32,5 +32,3 @@ createTable( "posts", postsHeader)
 
 blogsHeader = {"BlogID":"INTEGER PRIMARY KEY", "OwnerID":"INTEGER", "CollaboratorIDs":"TEXT","BlogName":"TEXT", "Category":"TEXT"}
 createTable("blogs", blogsHeader)
-
-closeDB()

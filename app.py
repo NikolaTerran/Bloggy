@@ -47,21 +47,21 @@ def login():
 def register():
     password = request.form['new_pwd']
     username= request.form['new_usr']
+    pwdCopy = request.form['re_pwd']
 #   command2 = 'INSERT INTO registration VALUES("' + username + '", "' + password  + '", "' + request.form['email'] + '")'
 #   c.execute(command2)
     try:
         populateDB.insert('users', ['profilepic', username, password])
     except:  # as e syntax added in ~python2.5
-        print("caught!") #BUG GOT TO FIX THIS FOR UNIQUE USERNAME
-    session['user'] = username
-    ##this is all hard coded
+        flash("your username is not unique; select a new one") #BUG GOT TO FIX THIS FOR UNIQUE USERNAME
+        return redirect(url_for('home'))
 
-    #adds this blogger in!
-##    populateDB.insert('users', ['pfp', 'password', 4])
-
-    #adds this blogger's first blog in!
-##    populateDB.insert('blogs', [4, 'blog1', 4, '1, 2, 3'])
-    return redirect(url_for('home'))
+    if password != pwdCopy:
+        flash('passwords do not match')
+        return redirect(url_for('home'))
+    else:
+        session['user'] = username
+        return redirect(url_for('home'))
 
 @app.route('/logout')
 def logout():

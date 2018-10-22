@@ -46,20 +46,20 @@ def insert(tableName, info):
 
 
 def findInfo(tableName,value,index):
-        c.execute("PRAGMA TABLE_INFO({})".format(tableName))
-        listNames = []
-        for cols in c.fetchall():
-            listNames.append(cols[1])
-        print(listNames[index])
-        command = "SELECT * FROM  '{0}'  WHERE {1} = '{2}'".format(tableName,listNames[index],value)
-        print(command)
-        c.execute(command)
-        listInfo = []
-        info = c.fetchone()
+    c.execute("PRAGMA TABLE_INFO({})".format(tableName))
+    listNames = []
+    for cols in c.fetchall():
+        listNames.append(cols[1])
+    print(listNames[index])
+    command = "SELECT * FROM  '{0}'  WHERE {1} = '{2}'".format(tableName,listNames[index],value)
+    print(command)
+    c.execute(command)
+    listInfo = []
+    info = c.fetchone()
+    if info:
         for col in info:
             print(col)
             listInfo.append(col)
-        print(listInfo)
-        return listInfo
+    return listInfo
 
 ##insert('blogs', [1, '1,2,3', 'blog1', 'food'])
