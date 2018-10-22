@@ -42,7 +42,9 @@ def insert(tableName, info):
                                                           values   ))
 
 def findInfo(tableName, ownerID):
-        command = 'SELECT * FROM ' + tableName + ' WHERE AuthorID=' + str(ownerID)
+        c.execute('PRAGMA TABLE_INFO({})'.format(tableName))
+        id = c.fetchone()[0]
+        command = 'SELECT * FROM ' + tableName + ' WHERE {} = {}'.format(id,ownerID)
         c.execute(command)
         info = c.fetchall()
         print ('info')
