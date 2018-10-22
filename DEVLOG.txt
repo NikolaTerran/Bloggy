@@ -1,4 +1,4 @@
-BuggyBloggers
+;BuggyBloggers
 Member Damian Wasilewicz
 Member Cathy Cai
 Member Jeffrey Wu
@@ -68,5 +68,9 @@ damianW 2018-10-19: 12:35
 tianrunL 2018-10-18: 12:36
 ------------------------------------------------------------------------------------------------------------------------------
   added register.html to templates, register route and register() to app.py. tweaked with data base functionality. register module still need more work on it
-
+==============================================================================================================================
+jeffreyW 2018-10-20: 10:29
+------------------------------------------------------------------------------------------------------------------------------
+  added database insertion function in populateDB.py.
+  Uses hard inputs/ will add csv functionality later, if needed
 ==============================================================================================================================
