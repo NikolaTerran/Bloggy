@@ -5,7 +5,7 @@ import sqlite3   #enable control of an sqlite database
 
 DB_FILE="blogs.db"
 
-db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
+db = sqlite3.connect(DB_FILE, check_same_thread=False) #open if file exists, otherwise create
 c = db.cursor()               #facilitate db ops
 
 #info is a list of fieldValues in order without primary key
@@ -41,4 +41,12 @@ def insert(tableName, info):
                                                           colNames ,
                                                           values   ))
 
-insert('blogs', [1, '1,2,3', 'blog1', 'food'])
+def findInfo(tableName, ownerID):
+        command = 'SELECT * FROM ' + tableName + ' WHERE AuthorID=' + str(ownerID)
+        c.execute(command)
+        info = c.fetchall()
+        print ('info')
+        print (info)
+        return info
+
+##insert('blogs', [1, '1,2,3', 'blog1', 'food'])

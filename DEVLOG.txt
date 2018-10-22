@@ -73,4 +73,21 @@ jeffreyW 2018-10-20: 10:29
 ------------------------------------------------------------------------------------------------------------------------------
   added database insertion function in populateDB.py.
   Uses hard inputs/ will add csv functionality later, if needed
+=======
+cathyC 2018-10-20: 12:17
+------------------------------------------------------------------------------------------------------------------------------
+  Completed login and registration functionalities
+  Linked profile with home page
+  Bug: database clears when page is reloaded
+==============================================================================================================================
+cathyC 2018-10-21: 00:07
+------------------------------------------------------------------------------------------------------------------------------
+  Added feature to edit old posts to edit.html
+  Added categories to welcome page
+==============================================================================================================================
+cathyC 2018-10-21: 02:42
+------------------------------------------------------------------------------------------------------------------------------
+  Hard coded for one user to populate the blog and post tables, and for the posts to show up on the user’s profile
+  Function to find blog/post by author/ownerID
+  Some problems with session holding onto user login info
 ==============================================================================================================================

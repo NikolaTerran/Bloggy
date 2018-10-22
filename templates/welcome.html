@@ -1,16 +1,22 @@
-{%extends "home.html"%}
-{%block title%}<title>Welcome</title>{%endblock title%}
-{%block greeting%}
-	    <head>
-	      Hello {{ user }}
-		</head></br>
-{%endblock greeting%}
-{%block login%}
-		<a href = '/logout'><input type = "button" value="logout"></input></a>
-{%endblock login%}
-{%block edit %}
-<h3>click the botton to add blog</h3>
-<a href = '/edit'><input type = "button" value="woo"></input></a>
-<h3>click the botton to view profile page</h3>
-<a href = '/username'><input type = "button" value="woo"></input></a>
-{%endblock edit%}
+<!DOCTYPE = html>
+<html>
+	{%block title%}<title>Welcome</title>{%endblock title%}
+	{%block greeting%}
+		<head>
+	  	Hello, {{ user }}!
+		</head><br>
+	{%endblock greeting%}
+
+	<a href="/username">Your Profile</a><br><br>
+	<a href="/edit">Edit your blog</a><br><br>
+	<div class="sidenav"><b>Blog Categories</b><br>
+  	<a href="#food">Food</a>
+  	<a href="#fashion">Fashion</a>
+  	<a href="#sports">Sports</a>
+  	<a href="#news">News</a>
+	</div>
+
+	{%block login%}
+		<br><br><br><a href = '/logout'><input type = "button" value="logout"></input></a>
+	{%endblock login%}
+</html>

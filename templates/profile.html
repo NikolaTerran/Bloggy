@@ -3,11 +3,28 @@
 <h1> Welcome to {{username}}'s page!
   <br>
   <br>
-  Feel free to look at some of the blogs they've made</h1>
+  Cathy's blogs:</h1>
 <br>
 <br>
   <table border="2">
     <tr>
+      <th>{{heading}}</th>
+    </tr>
+    <tr>
+      <td>{{blogs}}</td>
+    </tr>
+  </table><br><br>
+
+  <h1>Cathy's posts:</h1>
+<br>
+<br>
+  <table border="2">
+
+  {% for post in posts %}
+    <i>{{each}}</i>
+    <br><br>
+    {% endfor %}
+  <tr>
       <th>{{heading}}</th>
     </tr>
     <tr>
