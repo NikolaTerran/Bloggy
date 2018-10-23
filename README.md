@@ -15,6 +15,12 @@ pip3 install flask
 ```
 # Make sure you're running python3. Check by typing python3 and then seeing if it returns the version as Python 3.7.0. If not, install it.
 
+# To create database files:
+``` 
+python db_builder.py
+```
+
+
 # To launch the program:
 ``` 
 python app.py 
