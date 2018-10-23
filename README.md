@@ -13,8 +13,8 @@ python app..py
 ```
 
 # access local host:
-## type:
+type:
 ```
 http://127.0.0.1:5000/
 ```
-## in the browser.
+in your browser.
