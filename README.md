@@ -1,5 +1,8 @@
 # Bloggy!
 
-# dependencies:
-## 1:passlib
-## 2:flask
+# install dependencies:
+''' pip3 install passlib.hash
+    pip3 install flask '''
+
+# launch the program:
+''' python app..py '''
