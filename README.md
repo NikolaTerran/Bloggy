@@ -9,7 +9,7 @@ pip3 install flask
 
 # launch the program:
 ``` 
-python app..py 
+python app.py 
 ```
 
 # access local host:
