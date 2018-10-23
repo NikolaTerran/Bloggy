@@ -2,12 +2,16 @@
 <html>
 <h1> Welcome to {{username}}'s page!
   <h1>{{username}}'s Blogs:</h1>
-  <table border="2">
+  {% for post in posts %}
+    <b>{{post[4]}}</b><br>
+    {{post[3]}}<br><br>
+  {% endfor %}
+  <!-- <table border="2">
   <tr>
-      <th>{{heading}}</th>
+      <th>{{posts}}</th>
     </tr>
     <tr>
       <td>{{blogs}}</td>
     </tr>
-  </table>
+  </table> -->
 </html>

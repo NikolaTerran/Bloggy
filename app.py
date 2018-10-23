@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, session, redirect, url_for, f
 #import db_builder
 import populateDB
 from passlib.hash import sha256_crypt
+import time
 import sqlite3
 import os
 
@@ -81,30 +82,39 @@ def edit():
 		return redirect(url_for('home'))
 
 ##displays user's homepage, which shows the blog that was just created
-app.route('/submit', methods=['POST', 'GET'])
+@app.route('/submit', methods=['POST', 'GET'])
 def submit():
+    print ('submit called...')
     user = session['user']
-    head = request.form['blogTitle']
-    des = request.form['blogDes']
-    html_str = """
-    <table border="2">
-        <tr>
-            <th>{{head}}</th>
-        </tr>
-        <tr>
-            <td>{{des}}</td>
-        </tr>
-    </table>
-    """
+    user_id = populateDB.findInfo('users', user, 2)[0]
+    head = request.form['heading']
+    des = request.form['text']
+    print ('des')
+    post_id = populateDB.findInfo('posts', user_id, 2)
+    populateDB.insert('posts', [str(len(post_id)), user_id, des, str(time.asctime( time.localtime(time.time()))), 0])
+    # html_str = """
+    # <table border="2">
+    #     <tr>
+    #         <th>{{head}}</th>
+    #     </tr>
+    #     <tr>
+    #         <td>{{des}}</td>
+    #     </tr>
+    # </table>
+    # """
     return redirect(url_for('profile'))
 
 @app.route('/profile')
 def profile():
     user = session['user']
     print ('profile')
-    # posts = populateDB.findInfo('posts', 3)
-    # print (posts)
-    return render_template('profile.html', username = user, posts=posts)
+    id = populateDB.findInfo('users', user, 2)[0]
+
+    ##TO DO: MAKE A POST TABLE FOR EVERY USER
+    posts = populateDB.findInfo('posts', id, 2)
+    print ('posts')
+    print (posts)
+    return render_template('profile.html', username = user, posts=posts[::-1])
 
 
 #@app.route('/usernamedf')

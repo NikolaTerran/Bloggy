@@ -55,7 +55,10 @@ def findInfo(tableName,value,index):
     print(command)
     c.execute(command)
     listInfo = []
-    info = c.fetchone()
+    if tableName == 'posts':
+        info = c.fetchall()
+    else:
+        info = c.fetchone()
     if info:
         for col in info:
             print(col)
