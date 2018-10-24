@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 #import db_builder
 import populateDB
-from passlib.hash import sha256_crypt
+#from passlib.hash import sha256_crypt
 import time
 import sqlite3
 import os
@@ -61,7 +61,7 @@ def register():
         flash('passwords do not match')
         return redirect(url_for('home'))
     else:
-        session['user'] = username
+        flash("registration complete, please re-enter your login info");
         return redirect(url_for('home'))
 
 @app.route('/logout')
