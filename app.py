@@ -9,7 +9,6 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(8)
 
-
 ##command = "CREATE TABLE registration(username TEXT,password TEXT,email TEXT)"
 ##c.execute(command)    #run SQL statement
 
@@ -103,18 +102,39 @@ def submit():
     head = request.form['heading']
     des = request.form['text']
     print ('des')
-    post_id = populateDB.findInfo('posts', user_id, 2)
-    populateDB.insert('posts', [str(len(post_id)), user_id, des, str(time.asctime( time.localtime(time.time()))), 0])
-    # html_str = """
-    # <table border="2">
-    #     <tr>
-    #         <th>{{head}}</th>
-    #     </tr>
-    #     <tr>
-    #         <td>{{des}}</td>
-    #     </tr>
-    # </table>
-    # """
+    filename = head + ".html"
+
+
+    html_str = """<!DOCTYPE = html>
+		<heml>
+		<title>"""
+    html_str += head
+    html_str += "</title>"
+    html_str += "<head></head>"
+    html_str += "<body>"
+    html_str += des
+    html_str += "</body></html>"
+
+    Html_file= open(filename,"w")
+    Html_file.write(html_str)
+    Html_file.close()
+
+    #post_id = populateDB.findInfo('posts', user_id, 2)
+    #populateDB.insert('posts', [str(len(post_id)), user_id, des, str(time.asctime( time.localtime(time.time()))), 0])
+    
+    
+	
+	
+    ### html_str = """
+    ### <table border="2">
+    ###     <tr>
+    ###         <th>{{head}}</th>
+    ###     </tr>
+    ###     <tr>
+    ###         <td>{{des}}</td>
+    ###     </tr>
+    ### </table>
+    ### """
     return redirect(url_for('profile'))
 
 @app.route('/profile')
