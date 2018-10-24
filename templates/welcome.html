@@ -1,11 +1,21 @@
 <!DOCTYPE = html>
 <html>
 	{%block title%}<title>Welcome</title>{%endblock title%}
+	
+
+	{%set msgs = get_flashed_messages()%}
+	{%for each in msgs %}
+	<h1>{{each}}</h1>
+	<br>
+	{%endfor%}
+
 	{%block greeting%}
 		<head>
 	  	Hello, {{ user }}!
 		</head><br>
 	{%endblock greeting%}
+
+
 
 	<a href="/profile">Your Profile</a><br><br>
 	<a href="/create">Create a new blog</a><br><br>
@@ -15,6 +25,11 @@
   	<a href="#sports">Sports</a>
   	<a href="#news">News</a>
 	</div>
+    </br>
+    <form action="/search">
+		looking for a specific post:<input type = "text" name="search_value"></br>
+        <input type="submit" value="search">
+    </form> 
 
 	{%block login%}
 		<br><br><br><a href = '/logout'><input type = "button" value="logout"></input></a>

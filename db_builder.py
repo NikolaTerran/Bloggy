@@ -7,6 +7,7 @@ db = sqlite3.connect(DB_FILE, check_same_thread=False) #open if file exists, oth
 c = db.cursor()
 
 def createTable(tableName, fieldNames):
+	'''creates new table with list of parameters to be taken in'''
               #facilitate db ops
 	commandArgs = "("
 	colTypes = []

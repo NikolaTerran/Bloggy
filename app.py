@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 #import db_builder
 import populateDB
-from passlib.hash import sha256_crypt
+#from passlib.hash import sha256_crypt
 import time
 import sqlite3
 import os
@@ -14,6 +14,7 @@ app.secret_key = os.urandom(8)
 
 @app.route('/')
 def home():
+    ''' this function loads up home session, from where user can login and navigate through the website'''
     #checks if there is a session
     if 'user' in session:
         #if there is then just show the welcome screen
@@ -25,6 +26,7 @@ def home():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    '''logs the user in by checking if their login info matches with registered user'''
     username = request.form['usr']
     password = request.form['pwd']
     user_exists = populateDB.findInfo('users', username, 2)
@@ -43,6 +45,7 @@ def login():
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
+    '''registers new account for user'''
     password = request.form['new_pwd']
     username= request.form['new_usr']
     pwdCopy = request.form['re_pwd']
@@ -58,11 +61,12 @@ def register():
         flash('passwords do not match')
         return redirect(url_for('home'))
     else:
-        session['user'] = username
+        flash("registration complete, please re-enter your login info");
         return redirect(url_for('home'))
 
 @app.route('/logout')
 def logout():
+    '''pops user from session, brings user back to home page'''
     #removes current session
     print ('logout...')
     print (session)
@@ -73,6 +77,7 @@ def logout():
 #don't know how to add those stuff to database
 @app.route('/edit', methods=['POST', 'GET'])
 def edit():
+    '''allows the user to edit existing blogs'''
     if 'user' in session:
         user = session['user']
         blog_id = request.form['blog_edit']
@@ -86,10 +91,12 @@ def edit():
 
 @app.route('/create')
 def create():
+    '''loads html for adding blog to profile'''
     return render_template('createBlog.html', user = session['user'])
 
 @app.route('/makeblog', methods =['POST', 'GET'])
 def make():
+    '''adds blog based on input from user to db'''
     user = session['user']
     head = request.form['blogTitle']
     des = request.form['blogDes']
@@ -106,6 +113,7 @@ def make():
 ##displays user's homepage, which shows the blog that was just created
 @app.route('/submit', methods=['POST', 'GET'])
 def submit():
+    '''edits blog'''
     print ('submit called...')
     user = session['user']
     user_id = populateDB.findInfo('users', user, 2)[0]
@@ -134,6 +142,7 @@ def submit():
 
 @app.route('/profile')
 def profile():
+    '''displays home page for user, which includes all the blogs the user made'''
     user = session['user']
     print ('profile')
     id = populateDB.findInfo('users', user, 2)[0]
@@ -144,6 +153,10 @@ def profile():
     print(posts[::-1])
     return render_template('profile.html', username = user, blogs=blogs[::-1], posts=posts[::-1])
 
+@app.route('/search')
+def search():
+    flash("post not found")
+    return render_template('welcome.html',user=session['user'])
 #@app.route('/redirect')
 #def findblog():
 
