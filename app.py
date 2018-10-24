@@ -147,6 +147,10 @@ def profile():
     print(posts[::-1])
     return render_template('profile.html', username = user, blogs=blogs[::-1], posts=posts[::-1])
 
+@app.route('/search')
+def search():
+    flash("post not found")
+    return render_template('welcome.html',user=session['user'])
 #@app.route('/redirect')
 #def findblog():
 
