@@ -71,13 +71,16 @@ def logout():
 
 #edit stuff interface
 #don't know how to add those stuff to database
-@app.route('/edit')
+@app.route('/edit', methods=['POST', 'GET'])
 def edit():
     if 'user' in session:
         user = session['user']
-        id = populateDB.findInfo('users', user, 2)[0]
-        blogs = populateDB.findInfo('blogs', id, 1)
-        return render_template('edit.html',user = user, blogs=blogs)
+        blog_id = request.form['blog_edit']
+        # id = populateDB.findInfo('users', user, 2)[0]
+        blog = populateDB.findInfo('blogs', blog_id, 0)
+        print ('blog clicked')
+        print (blog[0][1])
+        return render_template('edit.html',user = user, blog = blog[0])
     else:
 		return redirect(url_for('home'))
 
@@ -108,10 +111,13 @@ def submit():
     user_id = populateDB.findInfo('users', user, 2)[0]
     head = request.form['heading']
     des = request.form['text']
-    print ('des')
-    blog_id = populateDB.findInfo('blogs', user_id, 2)[0][0]
+    blog_id = request.form['blog_id']
+    print ('blog_id')
     print (blog_id)
-    post_id = populateDB.findInfo('posts', user_id, 2)
+    # print ('des')
+    # blog_id = populateDB.findInfo('blogs', user_id, 2)[0][0]
+    # print (blog_id)
+    # post_id = populateDB.findInfo('posts', user_id, 2)
     populateDB.insert('posts', [blog_id, user_id, des, str(time.asctime( time.localtime(time.time()))), 0])
 
     ### html_str = """

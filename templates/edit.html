@@ -2,7 +2,7 @@
 <html>
 	{%block title%}<title>Edit your own buggy blog!</title>{%endblock title%}
 
-	{%block header%}<b><h3>Edit your own buggy blog!</h3></b>{%endblock header%}
+	{%block header%}<b><h3>Edit your Blog {{blog[3]}}</h3></b>{%endblock header%}
 
 	{%block edit%}
 	<b>Your Posts</b>
@@ -26,7 +26,7 @@
 			Blog heading: <input type = "text" name="heading" ></br>
 			<textarea name="text" rows="10" cols="30">Enter your stuff here</textarea>
   		<br>
-  		<input type="submit" value="Post!">
+  		<button type="submit" name="blog_id" value={{blog[0]}}>Post!</button>
 		</form>
 	{%endblock add%}
 </html>
