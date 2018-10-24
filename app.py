@@ -136,7 +136,7 @@ def profile():
     print(blogs)
     posts = populateDB.findInfo('posts', id, 2)
     print(posts[::-1])
-    return render_template('profile.html', username = user, blogs=blogs, posts=posts[::-1])
+    return render_template('profile.html', username = user, blogs=blogs[::-1], posts=posts[::-1])
 
 #@app.route('/redirect')
 #def findblog():
