@@ -88,8 +88,12 @@ def make():
     head = request.form['blogTitle']
     des = request.form['blogDes']
     cat = request.form['blogCat']
+    print(head)
+    print(des)
+    print(cat)
     user_id = populateDB.findInfo('users', user, 2)[0]
     blogstuff = [user_id, str(user_id), head, des, cat]
+    populateDB.insert('blogs',blogstuff)
     return redirect(url_for('profile'))
 
 
@@ -102,29 +106,10 @@ def submit():
     head = request.form['heading']
     des = request.form['text']
     print ('des')
-    filename = head + ".html"
-
-
-    html_str = """<!DOCTYPE = html>
-		<heml>
-		<title>"""
-    html_str += head
-    html_str += "</title>"
-    html_str += "<head></head>"
-    html_str += "<body>"
-    html_str += des
-    html_str += "</body></html>"
-
-    Html_file= open(filename,"w")
-    Html_file.write(html_str)
-    Html_file.close()
-
     #post_id = populateDB.findInfo('posts', user_id, 2)
     #populateDB.insert('posts', [str(len(post_id)), user_id, des, str(time.asctime( time.localtime(time.time()))), 0])
-    
-    
-	
-	
+
+
     ### html_str = """
     ### <table border="2">
     ###     <tr>
@@ -142,8 +127,10 @@ def profile():
     user = session['user']
     print ('profile')
     id = populateDB.findInfo('users', user, 2)[0]
+    print(id)
     ##TO DO: MAKE A POST TABLE FOR EVERY USER
     blogs = populateDB.findInfo('blogs', id, 1)
+    print(blogs)
     return render_template('profile.html', username = user, blogs=blogs)
 
 

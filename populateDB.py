@@ -50,18 +50,18 @@ def findInfo(tableName,value,index):
     listNames = []
     for cols in c.fetchall():
         listNames.append(cols[1])
-    print(listNames[index])
+    #print(listNames[index])
     command = "SELECT * FROM  '{0}'  WHERE {1} = '{2}'".format(tableName,listNames[index],value)
-    print(command)
+    #print(command)
     c.execute(command)
     listInfo = []
-    if tableName == 'posts':
-        info = c.fetchall()
-    else:
+    if tableName == 'users':
         info = c.fetchone()
+    else:
+        info = c.fetchall()
     if info:
         for col in info:
-            print(col)
+            #print(col)
             listInfo.append(col)
     return listInfo
 
