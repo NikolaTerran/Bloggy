@@ -3,7 +3,12 @@
 <h1> Welcome to {{username}}'s page!
   <h1>{{username}}'s Blogs:</h1>
   {% for blog in blogs %}
-    <b>{{blog[3]}}</b><br>
-    {{blog[4]}}<br><br>
+    <h3>{{blog[3]}}</h3>
+    <i>{{blog[4]}}</i><br><br>
+    {% for post in posts %}
+      <b>{{post[4]}}:</b>
+      {{post[3]}}<br>
+    {% endfor %}
+    <br><br><a href="/edit">Edit your blog</a><br><br>
   {% endfor %}
 </html>

@@ -17,6 +17,11 @@
 
 	{%block add%}
 	<b>Add a post</b>
+	<!-- <select name="blogs">
+		{% for blog in blogs %}
+			<option value=blog.>blog</option>
+		{% endfor %}
+	</select> -->
 		<form action="/submit" method = "POST">
 			Blog heading: <input type = "text" name="heading" ></br>
 			<textarea name="text" rows="10" cols="30">Enter your stuff here</textarea>

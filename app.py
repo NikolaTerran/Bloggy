@@ -73,9 +73,12 @@ def logout():
 #don't know how to add those stuff to database
 @app.route('/edit')
 def edit():
-	if 'user' in session:
-		return render_template('edit.html',user = session['user'])
-	else:
+    if 'user' in session:
+        user = session['user']
+        id = populateDB.findInfo('users', user, 2)[0]
+        blogs = populateDB.findInfo('blogs', id, 1)
+        return render_template('edit.html',user = user, blogs=blogs)
+    else:
 		return redirect(url_for('home'))
 
 @app.route('/create')
@@ -106,9 +109,10 @@ def submit():
     head = request.form['heading']
     des = request.form['text']
     print ('des')
-    #post_id = populateDB.findInfo('posts', user_id, 2)
-    #populateDB.insert('posts', [str(len(post_id)), user_id, des, str(time.asctime( time.localtime(time.time()))), 0])
-
+    blog_id = populateDB.findInfo('blogs', user_id, 2)[0][0]
+    print (blog_id)
+    post_id = populateDB.findInfo('posts', user_id, 2)
+    populateDB.insert('posts', [blog_id, user_id, des, str(time.asctime( time.localtime(time.time()))), 0])
 
     ### html_str = """
     ### <table border="2">
@@ -128,11 +132,11 @@ def profile():
     print ('profile')
     id = populateDB.findInfo('users', user, 2)[0]
     print(id)
-    ##TO DO: MAKE A POST TABLE FOR EVERY USER
     blogs = populateDB.findInfo('blogs', id, 1)
     print(blogs)
-    return render_template('profile.html', username = user, blogs=blogs)
-
+    posts = populateDB.findInfo('posts', id, 2)
+    print(posts[::-1])
+    return render_template('profile.html', username = user, blogs=blogs, posts=posts[::-1])
 
 #@app.route('/redirect')
 #def findblog():
