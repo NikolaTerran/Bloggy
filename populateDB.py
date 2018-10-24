@@ -11,6 +11,7 @@ c = db.cursor()               #facilitate db ops
 
 #info is a list of fieldValues in order without primary key
 def insert(tableName, info):
+    '''inserts data into certain table, taking info as a list of parameters'''
     # collect Column Data Types and Names in strings
     c.execute('PRAGMA TABLE_INFO({})'.format(tableName))
     colNames = ''
@@ -46,6 +47,7 @@ def insert(tableName, info):
 
 
 def findInfo(tableName,value,index):
+    '''returns information with specific value and index from specified db table'''
     c.execute("PRAGMA TABLE_INFO({})".format(tableName))
     listNames = []
     for cols in c.fetchall():
