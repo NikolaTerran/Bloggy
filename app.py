@@ -42,8 +42,6 @@ def login():
         flash("username wrong")
         return render_template('home.html')
 
-##BUG: Database doesn't hold onto username and password upon refresh
-
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     password = request.form['new_pwd']
@@ -81,6 +79,21 @@ def edit():
 	else:
 		return redirect(url_for('home'))
 
+@app.route('/create')
+def create():
+    return render_template('createBlog.html', user = session['user'])
+
+@app.route('/makeblog', methods =['POST', 'GET'])
+def make():
+    user = session['user']
+    head = request.form['blogTitle']
+    des = request.form['blogDes']
+    cat = request.form['blogCat']
+    user_id = populateDB.findInfo('users', user, 2)[0]
+    blogstuff = [user_id, str(user_id), head, des, cat]
+    return redirect(url_for('profile'))
+
+
 ##displays user's homepage, which shows the blog that was just created
 @app.route('/submit', methods=['POST', 'GET'])
 def submit():
@@ -109,12 +122,13 @@ def profile():
     user = session['user']
     print ('profile')
     id = populateDB.findInfo('users', user, 2)[0]
-
     ##TO DO: MAKE A POST TABLE FOR EVERY USER
-    posts = populateDB.findInfo('posts', id, 2)
-    print ('posts')
-    print (posts)
-    return render_template('profile.html', username = user, posts=posts[::-1])
+    blogs = populateDB.findInfo('blogs', id, 1)
+    return render_template('profile.html', username = user, blogs=blogs)
+
+
+#@app.route('/redirect')
+#def findblog():
 
 
 #@app.route('/usernamedf')
@@ -139,6 +153,5 @@ def profile():
 ##	#	return render_template('home.html')
 ##	#else:
 ##		return render_template('register.html')
-
 if __name__ == "__main__":
     app.run(debug=True)
