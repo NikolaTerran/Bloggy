@@ -166,3 +166,8 @@ cathyC 2018-10-24: 22:32
   A user can now view the blogs and posts of other users without editing rights
   To do: find a better way to pass user_id info from HTML 
 ==============================================================================================================================
+cathyC 2018-10-24: 12:03
+------------------------------------------------------------------------------------------------------------------------------
+  Profile page can now display descriptions and categories of blogs
+  Changed buttons on profile and blog pages
+==============================================================================================================================
