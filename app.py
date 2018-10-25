@@ -84,7 +84,7 @@ def edit():
         # id = populateDB.findInfo('users', user, 2)[0]
         blog = populateDB.findInfo('blogs', blog_id, 0)
         print ('blog clicked')
-        print (blog[0][1])
+        print (blog[0])
         return render_template('edit.html',user = user, blog = blog[0])
     else:
         return redirect(url_for('home'))
@@ -149,9 +149,19 @@ def profile():
     print(id)
     blogs = populateDB.findInfo('blogs', id, 1)
     print(blogs)
-    posts = populateDB.findInfo('posts', id, 2)
+    return render_template('profile.html', username = user, blogs=blogs[::-1])
+
+@app.route('/blog', methods=['POST', 'GET'])
+def blog():
+    '''displays each blog for user'''
+    user = session['user']
+    blog_id = request.form['blog_id']
+    blog = populateDB.findInfo('blogs', blog_id, 0)
+    posts = populateDB.findInfo('posts', blog_id, 1)
+    print ('blog')
+    print (blog[0][3])
     print(posts[::-1])
-    return render_template('profile.html', username = user, blogs=blogs[::-1], posts=posts[::-1])
+    return render_template('blog.html', username = user, blog = blog, posts=posts[::-1])
 
 @app.route('/search')
 def search():
