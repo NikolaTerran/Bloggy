@@ -4,7 +4,10 @@
   <h1>{{username}}'s Blogs:</h1>
   {% for blog in blogs %}
     <form action="/blog" method = "POST">
-      <h3><button type="submit" name="blog_id" value={{blog[0]}}>{{blog[3]}}</button></h3>
+      <b>{{blog[3]}}</b><br>
+      <i>{{blog[4]}}</i><br>
+      Category: {{blog[5]}}<br>
+      <button type="submit" name="blog_id" value={{blog[0]}}>view blog</button><br><br>
     </form>
   {% endfor %}
   <a href="/">home</a>
