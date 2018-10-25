@@ -46,14 +46,20 @@ def insert(tableName, info):
 
 
 
-def findInfo(tableName,value,index):
-    '''returns information with specific value and index from specified db table'''
+def findInfo(tableName,value,index, sortIndex = None):
+    '''returns entire record with specific value at specific index from specified db table'''
     c.execute("PRAGMA TABLE_INFO({})".format(tableName))
     listNames = []
     for cols in c.fetchall():
         listNames.append(cols[1])
+        
+    if sortIndex:
+        sortQuery = 'ORDER BY {}'.format(listNames[sortIndex])
+    else:
+        sortQuery = ''
     #print(listNames[index])
     command = "SELECT * FROM  '{0}'  WHERE {1} = '{2}'".format(tableName,listNames[index],value)
+    command += sortQuery
     #print(command)
     c.execute(command)
     listInfo = []
@@ -61,10 +67,13 @@ def findInfo(tableName,value,index):
         info = c.fetchone()
     else:
         info = c.fetchall()
+
     if info:
         for col in info:
             #print(col)
             listInfo.append(col)
     return listInfo
+
+print(findInfo('posts',2,2,3))
 
 ##insert('blogs', [1, '1,2,3', 'blog1', 'food'])

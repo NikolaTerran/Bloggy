@@ -87,7 +87,7 @@ def edit():
         print (blog[0][1])
         return render_template('edit.html',user = user, blog = blog[0])
     else:
-		return redirect(url_for('home'))
+        return redirect(url_for('home'))
 
 @app.route('/create')
 def create():
