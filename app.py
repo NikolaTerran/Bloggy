@@ -140,12 +140,19 @@ def submit():
     ### """
     return redirect(url_for('profile'))
 
-@app.route('/profile')
+@app.route('/profile', methods=['POST', 'GET'])
 def profile():
     '''displays home page for user, which includes all the blogs the user made'''
-    user = session['user']
     print ('profile')
-    id = populateDB.findInfo('users', user, 2)[0]
+    try:
+        request.form['user_id']
+        id = request.form['user_id']
+        user = populateDB.findInfo('users', id, 0)[2]
+        print ('user here')
+        print (user)
+    except:
+        user = session['user']
+        id = populateDB.findInfo('users', user, 2)[0]
     print(id)
     blogs = populateDB.findInfo('blogs', id, 1)
     print(blogs)
@@ -162,6 +169,13 @@ def blog():
     print (blog[0][3])
     print(posts[::-1])
     return render_template('blog.html', username = user, blog = blog, posts=posts[::-1])
+
+@app.route('/usernav', methods=['POST', 'GET'])
+def users():
+    '''displays every user with their blogs'''
+    users = populateDB.findUsers()
+    print (users)
+    return render_template('users.html', users=users)
 
 @app.route('/search')
 def search():

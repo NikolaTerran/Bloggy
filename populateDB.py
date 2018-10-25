@@ -52,7 +52,7 @@ def findInfo(tableName,value,index, sortIndex = None):
     listNames = []
     for cols in c.fetchall():
         listNames.append(cols[1])
-        
+
     if sortIndex:
         sortQuery = 'ORDER BY {}'.format(listNames[sortIndex])
     else:
@@ -73,6 +73,12 @@ def findInfo(tableName,value,index, sortIndex = None):
             #print(col)
             listInfo.append(col)
     return listInfo
+
+def findUsers():
+    command = "SELECT * FROM 'users'"
+    c.execute(command)
+    users = c.fetchall()
+    return users
 
 print(findInfo('posts',2,2,3))
 

@@ -1,0 +1,9 @@
+<!DOCTYPE = html>
+<html>
+  <h2>View other bloggers and their work</h2>
+  {% for user in users %}
+    <form action="/profile", method = "POST">
+      <button type="submit" name="user_id" value={{user[0]}}>{{user[2]}}</button><br>
+    </form>
+  {% endfor %}
+</html>

@@ -160,3 +160,9 @@ cathyC 2018-10-24: 21:50
   Added option to go back to profile page, but would prefer to go back to blog page
   To do: find a better way to pass blog_id info from HTML other than using a button
 ==============================================================================================================================
+cathyC 2018-10-24: 22:32
+------------------------------------------------------------------------------------------------------------------------------
+  Added a user navigation page
+  A user can now view the blogs and posts of other users without editing rights
+  To do: find a better way to pass user_id info from HTML 
+==============================================================================================================================
