@@ -161,14 +161,15 @@ def profile():
 @app.route('/blog', methods=['POST', 'GET'])
 def blog():
     '''displays each blog for user'''
-    user = session['user']
     blog_id = request.form['blog_id']
+    user_id = populateDB.findInfo('blogs', blog_id, 0)[0][1]
+    user_name = populateDB.findInfo('users', user_id, 0)[2]
     blog = populateDB.findInfo('blogs', blog_id, 0)
     posts = populateDB.findInfo('posts', blog_id, 1)
     print ('blog')
     print (blog[0][3])
     print(posts[::-1])
-    return render_template('blog.html', username = user, blog = blog, posts=posts[::-1])
+    return render_template('blog.html', username = user_name, blog = blog, posts=posts[::-1])
 
 @app.route('/usernav', methods=['POST', 'GET'])
 def users():
