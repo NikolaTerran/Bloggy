@@ -162,9 +162,9 @@ def profile():
 def blog():
     '''displays each blog for user'''
     blog_id = request.form['blog_id']
-    user_id = populateDB.findInfo('blogs', blog_id, 0)[0][1]
-    user_name = populateDB.findInfo('users', user_id, 0)[2]
     blog = populateDB.findInfo('blogs', blog_id, 0)
+    user_id = blog[0][1]
+    user_name = populateDB.findInfo('users', user_id, 0)[2]
     posts = populateDB.findInfo('posts', blog_id, 1)
     print ('blog')
     print (blog[0][3])
