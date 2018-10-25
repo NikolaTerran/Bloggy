@@ -171,3 +171,8 @@ cathyC 2018-10-24: 12:03
   Profile page can now display descriptions and categories of blogs
   Changed buttons on profile and blog pages
 ==============================================================================================================================
+tianrunL 2018-10-25: 12:34
+------------------------------------------------------------------------------------------------------------------------------
+  user can add photos to edit page, however the photo is not processed, need to ask Mr. Brown the permission to use openCV
+  https://stackoverflow.com/questions/41586429/opencv-saving-images-to-a-particular-folder-of-choice/41587740
+==============================================================================================================================
