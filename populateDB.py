@@ -46,24 +46,30 @@ def insert(tableName, info):
 
 
 
-def findInfo(tableName,value,index, sortIndex = None):
+def findInfo(tableName,value,index, sortIndex = None, notEqual = None, fetchType = None):
     '''returns entire record with specific value at specific index from specified db table'''
     c.execute("PRAGMA TABLE_INFO({})".format(tableName))
     listNames = []
     for cols in c.fetchall():
         listNames.append(cols[1])
 
+    if notEqual:
+        boolEqual = '!'
+    else:
+        boolEqual = ''
+
     if sortIndex:
         sortQuery = 'ORDER BY {}'.format(listNames[sortIndex])
     else:
         sortQuery = ''
+
     #print(listNames[index])
-    command = "SELECT * FROM  '{0}'  WHERE {1} = '{2}'".format(tableName,listNames[index],value)
+    command = "SELECT * FROM  '{0}'  WHERE {1}  {3}= '{2}'".format(tableName,listNames[index],value, boolEqual)
     command += sortQuery
     #print(command)
     c.execute(command)
     listInfo = []
-    if tableName == 'users':
+    if fetchType:
         info = c.fetchone()
     else:
         info = c.fetchall()
@@ -73,6 +79,11 @@ def findInfo(tableName,value,index, sortIndex = None):
             #print(col)
             listInfo.append(col)
     return listInfo
+
+# def modify(tableName, ,coltoMod, newVal):
+#     '''UPDATE tableName
+#     SET column1=value1, column2=value2,...
+#  WHERE filterColumn=filterValue'''
 
 def findUsers():
     command = "SELECT * FROM 'users'"

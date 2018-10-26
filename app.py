@@ -29,7 +29,7 @@ def login():
     '''logs the user in by checking if their login info matches with registered user'''
     username = request.form['usr']
     password = request.form['pwd']
-    user_exists = populateDB.findInfo('users', username, 2)
+    user_exists = populateDB.findInfo('users', username, 2, )
     print ('user_exists')
     print (user_exists)
     if user_exists:
@@ -104,7 +104,7 @@ def make():
     print(head)
     print(des)
     print(cat)
-    user_id = populateDB.findInfo('users', user, 2)[0]
+    user_id = populateDB.findInfo('users', user, 2, None, None, True)[0]
     blogstuff = [user_id, str(user_id), head, des, cat]
     populateDB.insert('blogs',blogstuff)
     return redirect(url_for('profile'))
@@ -116,7 +116,7 @@ def submit():
     '''edits blog'''
     print ('submit called...')
     user = session['user']
-    user_id = populateDB.findInfo('users', user, 2)[0]
+    user_id = populateDB.findInfo('users', user, 2, None,None,True)[0]
     head = request.form['heading']
     des = request.form['text']
     blog_id = request.form['blog_id']
@@ -147,12 +147,12 @@ def profile():
     try:
         request.form['user_id']
         id = request.form['user_id']
-        user = populateDB.findInfo('users', id, 0)[2]
+        user = populateDB.findInfo('users', id, 0, None, None, True)[2]
         print ('user here')
         print (user)
     except:
         user = session['user']
-        id = populateDB.findInfo('users', user, 2)[0]
+        id = populateDB.findInfo('users', user, 2, None, None, True)[0]
     print(id)
     blogs = populateDB.findInfo('blogs', id, 1)
     print(blogs)
@@ -164,7 +164,7 @@ def blog():
     blog_id = request.form['blog_id']
     blog = populateDB.findInfo('blogs', blog_id, 0)
     user_id = blog[0][1]
-    user_name = populateDB.findInfo('users', user_id, 0)[2]
+    user_name = populateDB.findInfo('users', user_id, 0,None, None, True)[2]
     posts = populateDB.findInfo('posts', blog_id, 1)
     print ('blog')
     print (blog[0][3])
@@ -174,7 +174,8 @@ def blog():
 @app.route('/usernav', methods=['POST', 'GET'])
 def users():
     '''displays every user with their blogs'''
-    users = populateDB.findUsers()
+    user = session['user']
+    users = populateDB.findInfo('users',user,2, None, True)
     print (users)
     return render_template('users.html', users=users)
 
@@ -185,6 +186,9 @@ def search():
 #@app.route('/redirect')
 #def findblog():
 
+def like():
+    #insert
+    return 0
 
 #@app.route('/usernamedf')
 #def profile():

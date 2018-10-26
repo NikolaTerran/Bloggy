@@ -5,6 +5,8 @@
   {% for post in posts %}
     <b>{{post[4]}}:</b>
     {{post[3]}}<br>
+    Likes: {{post[5]}}
+    <button onclick="/like" name = "upDown" value = {{post[0]}}> Like </submit>
   {% endfor %}
   <br><br>
   <form action="/edit" method = "POST">
