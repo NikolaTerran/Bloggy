@@ -29,7 +29,7 @@ def login():
     '''logs the user in by checking if their login info matches with registered user'''
     username = request.form['usr']
     password = request.form['pwd']
-    user_exists = populateDB.findInfo('users', username, 2, )
+    user_exists = populateDB.findInfo('users', username, 2, None, None, True)
     print ('user_exists')
     print (user_exists)
     if user_exists:
@@ -127,7 +127,7 @@ def submit():
 #stackoverflow://to.com/questions/41586429/opencv-saving-images-to-a-particular-folder-of-choice/41587740
 
     pic = request.form['pic']
-    
+
 
 
 
