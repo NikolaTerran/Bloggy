@@ -120,6 +120,19 @@ def submit():
     head = request.form['heading']
     des = request.form['text']
     blog_id = request.form['blog_id']
+
+
+#If you want to put pic in db, make sure to add a pic field in db table
+#PM should ask mr. brown whether is ok use openCV:
+#stackoverflow://to.com/questions/41586429/opencv-saving-images-to-a-particular-folder-of-choice/41587740
+
+    pic = request.form['pic']
+    
+
+
+
+
+
     print ('blog_id')
     print (blog_id)
     # print ('des')
@@ -183,6 +196,11 @@ def users():
 def search():
     flash("post not found")
     return render_template('welcome.html',user=session['user'])
+
+#link this to database
+@app.route('/photo')
+def photo():
+    return request.form['pic']
 #@app.route('/redirect')
 #def findblog():
 

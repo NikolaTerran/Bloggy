@@ -19,7 +19,9 @@
 	<b>Add a post</b>
 		<form action="/submit" method = "POST">
 			Blog heading: <input type = "text" name="heading" ></br>
-			<textarea name="text" rows="10" cols="30">Enter your stuff here</textarea>
+			<textarea name="text" rows="10" cols="30">Enter your stuff here</textarea></br>
+			Add some nice pictures!
+			<input type="file" name="pic" accept="image/*">
   		<br>
   		<button type="submit" name="blog_id" value={{blog[0]}}>Post!</button>
 		</form>
