@@ -52,7 +52,7 @@ def findInfo(tableName,value,index, sortIndex = None, notEqual = None, fetchType
     listNames = []
     for cols in c.fetchall():
         listNames.append(cols[1])
-
+    print(listNames)
     if notEqual:
         boolEqual = '!'
     else:
