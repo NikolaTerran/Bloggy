@@ -5,12 +5,12 @@
 	{%block header%}<b><h3>Create a new blog!</h3></b>{%endblock header%}
   {%block add%}
 		<form action="/makeblog", method = "POST">
-			Blog Title: <input type = "text" name="blogTitle" ></br>
+			Blog Title: <input type = "text" name="blogTitle" placeholder = "Title" required></br>
 			Description:
 			<br>
-			<textarea name="blogDes" rows="10" cols="30">Enter your stuff here</textarea>
+			<textarea name="blogDes" rows="10" cols="30" placeholder = "Enter your stuff here" required></textarea>
 			<br>
-			Category:<input type = "text" name="blogCat" ></br>
+			Category:<input type = "text" name="blogCat" placeholder = "Category" required></br>
   		<br>
   		<input type="submit" value="Create">
 		</form>

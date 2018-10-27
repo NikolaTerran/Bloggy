@@ -126,7 +126,7 @@ def submit():
 #PM should ask mr. brown whether is ok use openCV:
 #stackoverflow://to.com/questions/41586429/opencv-saving-images-to-a-particular-folder-of-choice/41587740
 
-    pic = request.form['pic']
+    #pic = request.form['pic']
 
 
 
