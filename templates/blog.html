@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html>
 <h1> {{username}}'s {{blog[0][3]}}</h1>
-<h3> Posts </h3>
+<h2> Posts </h2>
   {% for post in posts %}
-    <b>{{post[4]}}:</b>
-    {{post[3]}}<br>
+    <h3>{{post[6]}}</h3>
+    {{post[3]}}<br><br>
+    <i>{{post[4]}}</i><br>
     Likes: {{post[5]}}
     <br>
-    <button onclick="like()" name = "post_id" value = {{post[0]}}> Like </button>
+    <form action="/edit_post" method = "POST">
+      <button type="submit" name = "like_id" value = {{post[0]}}>Like</button><br>
+      <button type="submit" name="edit_id" value={{post[0]}}>Edit</button><br>
+      <button type="submit" name = "delete_id" value ={{post[0]}}> Delete </button><br>
+    </form>
   {% endfor %}
-  <br><br>
-  <form action="/edit" method = "POST">
-    <button type="submit" name="blog_edit" value={{blog[0][0]}}>Edit your blog</button>
+  <br>
+  <form action="/add_post" method = "POST">
+    <button type="submit" name="add_post" value={{blog[0][0]}}>Add a post</button>
   </form><br>
   <a href="/profile">Profile</a><br><br>
 </html>

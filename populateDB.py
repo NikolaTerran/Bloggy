@@ -60,5 +60,5 @@ def findInfo(tableName,filterValue,colToFilt, sortCol = None, notEqual = None, f
     return listInfo
 
 def modify(tableName, colToMod, newVal, filterIndex, filterValue):
-     c.execute("UPDATE {0} SET {1}='{2}' WHERE {3}='{4}'").format(tableName, colToMod, newVal, filterIndex)
+     c.execute(("UPDATE {0} SET {1}='{2}' WHERE {3}='{4}'").format(tableName, colToMod, newVal, filterIndex, filterValue))
      db.commit()
