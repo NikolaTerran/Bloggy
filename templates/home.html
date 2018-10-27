@@ -20,8 +20,8 @@
 		<h3>Welcome to Buggy Bloggers!</h3>
 		<h3>To view/edit blogs, please login.</h3>
 		<form action="/login" method="POST">
-			Username: <input type = "text" name="usr" ></br>
-			Password: <input type = "text" name="pwd"></br>
+			Username: <input type = "text" name="usr" placeholder = "Username"></br>
+			Password: <input type = "text" name="pwd" placeholder = "Password"></br>
 			<input type="submit" value="Submit">
 		</form>
 		{%endblock login%} <br>
@@ -29,8 +29,8 @@
 		<h3>New User? Smash that register button!</h3>
 		{%block register%}
 			<form action="/register" method="POST">
-				Username: <input type = "text" name="new_usr" ></br>
-				Password: <input type = "text" name="new_pwd"></br>
+				Username: <input type = "text" name="new_usr" placeholder = Username></br>
+				Password: <input type = "text" name="new_pwd" placeholder = Password></br>
 				Re-enter Password: <input type = "text" name="re_pwd"></br>
 				<input type="submit" value="Register">
 			</form>
