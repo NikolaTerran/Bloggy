@@ -29,7 +29,7 @@ def login():
     '''logs the user in by checking if their login info matches with registered user'''
     username = request.form['usr']
     password = request.form['pwd']
-    user_exists = populateDB.findInfo('users', username, 2, None, None, True)
+    user_exists = populateDB.findInfo('users', username, 'username', fetchOne = True)
     print ('user_exists')
     print (user_exists)
     if user_exists:
@@ -82,7 +82,7 @@ def edit():
         user = session['user']
         blog_id = request.form['blog_edit']
         # id = populateDB.findInfo('users', user, 2)[0]
-        blog = populateDB.findInfo('blogs', blog_id, 0)
+        blog = populateDB.findInfo('blogs', blog_id, 'BlogID')
         print ('blog clicked')
         print (blog[0])
         return render_template('edit.html',user = user, blog = blog[0])
@@ -104,7 +104,7 @@ def make():
     print(head)
     print(des)
     print(cat)
-    user_id = populateDB.findInfo('users', user, 2, None, None, True)[0]
+    user_id = populateDB.findInfo('users', user, 'username', fetchOne = True)[0]
     blogstuff = [user_id, str(user_id), head, des, cat]
     populateDB.insert('blogs',blogstuff)
     return redirect(url_for('profile'))
@@ -116,7 +116,7 @@ def submit():
     '''edits blog'''
     print ('submit called...')
     user = session['user']
-    user_id = populateDB.findInfo('users', user, 2, None,None,True)[0]
+    user_id = populateDB.findInfo('users', user, 'username', fetchOne = True)[0]
     head = request.form['heading']
     des = request.form['text']
     blog_id = request.form['blog_id']
@@ -139,7 +139,7 @@ def submit():
     # blog_id = populateDB.findInfo('blogs', user_id, 2)[0][0]
     # print (blog_id)
     # post_id = populateDB.findInfo('posts', user_id, 2)
-    populateDB.insert('posts', [blog_id, user_id, des, str(time.asctime( time.localtime(time.time()))), 0])
+    populateDB.insert('posts', [blog_id, user_id, des, str(time.asctime( time.localtime(time.time()))), 0, head])
 
     ### html_str = """
     ### <table border="2">
@@ -160,14 +160,14 @@ def profile():
     try:
         request.form['user_id']
         id = request.form['user_id']
-        user = populateDB.findInfo('users', id, 0, None, None, True)[2]
+        user = populateDB.findInfo('users', id, 'UserID', fetchOne = True)[2]
         print ('user here')
         print (user)
     except:
         user = session['user']
-        id = populateDB.findInfo('users', user, 2, None, None, True)[0]
+        id = populateDB.findInfo('users', user, 'username', fetchOne =  True)[0]
     print(id)
-    blogs = populateDB.findInfo('blogs', id, 1)
+    blogs = populateDB.findInfo('blogs', id, 'ownerID')
     print(blogs)
     return render_template('profile.html', username = user, blogs=blogs[::-1])
 
@@ -175,10 +175,10 @@ def profile():
 def blog():
     '''displays each blog for user'''
     blog_id = request.form['blog_id']
-    blog = populateDB.findInfo('blogs', blog_id, 0)
+    blog = populateDB.findInfo('blogs', blog_id, 'blogID')
     user_id = blog[0][1]
-    user_name = populateDB.findInfo('users', user_id, 0,None, None, True)[2]
-    posts = populateDB.findInfo('posts', blog_id, 1)
+    user_name = populateDB.findInfo('users', user_id, 'UserID', fetchOne = True)[2]
+    posts = populateDB.findInfo('posts', blog_id, 'blogId')
     print ('blog')
     print (blog[0][3])
     print(posts[::-1])
@@ -188,7 +188,7 @@ def blog():
 def users():
     '''displays every user with their blogs'''
     user = session['user']
-    users = populateDB.findInfo('users',user,2, None, True)
+    users = populateDB.findInfo('users',user,'Username', notEqual = True)
     print (users)
     return render_template('users.html', users=users)
 
@@ -205,8 +205,11 @@ def photo():
 #def findblog():
 
 def like():
-    #insert
-    return 0
+    user = session['user']
+    user_id = populateDB.findInfo('users', user, 'Username', fetchOne =  True)[0]
+    post_id = request.form['post_id']
+    votes = findInfo('posts', post_id, postID, fetchOnethOne=True)[1]
+    #modify('posts', )
 
 #@app.route('/usernamedf')
 #def profile():
