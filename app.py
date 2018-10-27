@@ -46,9 +46,9 @@ def login():
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     '''registers new account for user'''
-    password = request.form['new_pwd']
-    username= request.form['new_usr']
-    pwdCopy = request.form['re_pwd']
+    password = request.form['new_pwd'].strip()
+    username= request.form['new_usr'].strip()
+    pwdCopy = request.form['re_pwd'].strip()
 #   command2 = 'INSERT INTO registration VALUES("' + username + '", "' + password  + '", "' + request.form['email'] + '")'
 #   c.execute(command2)
     try:
