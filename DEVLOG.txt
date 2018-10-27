@@ -204,3 +204,9 @@ DamianW 2018-10-27 12:23
 ------------------------------------------------------------------------------------------------------------------------------
   Stripped spaces from username and password, which makes logging in less of a hassle
 ==============================================================================================================================
+cathyC 2018-10-27 15:24
+------------------------------------------------------------------------------------------------------------------------------
+  Added function to edit pre-existing posts, which updates the text and timestamp
+  Added a separate page to edit a specific post. Heading cannot be changed
+  Added function to like posts, although user can currently like more than once
+==============================================================================================================================
