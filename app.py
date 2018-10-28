@@ -165,24 +165,33 @@ def post():
     '''adds a post'''
     print ('submit called...')
     user = session['user']
-    user_id = populateDB.findInfo('users', user, 'username', fetchOne = True)[0]
+    user_all = populateDB.findInfo('users', user, 'username', fetchOne = True)
+    user_id = user_all[0]
+    posts_liked = user_all[4]
     head = request.form['heading']
     text = request.form['text']
     blog_id = request.form['blog_id']
     poststuff = [blog_id, user_id, text, str(time.asctime( time.localtime(time.time()))), 0, head]
     populateDB.insert('posts', poststuff)
-    return redirect(url_for('profile'))
+    blog = populateDB.findInfo('blogs', blog_id, 'blogID', fetchOne =True)
+    posts = populateDB.findInfo('posts', blog_id, 'blogID')
+    return render_template('blog.html', username = user_all[2], viewerPostLiked = posts_liked, blog = blog, posts=posts[::-1])
 
 @app.route('/edit', methods=['POST', 'GET'])
 def edit():
     '''edits a post'''
     print ('edit called...')
     user = session['user']
+    user_all = populateDB.findInfo('users', user, 'username', fetchOne = True)
+    posts_liked = user_all[4]
     text = request.form['text']
     post_id = request.form['post_id']
     populateDB.modify('posts', 'Content', text, 'PostID', post_id)
     populateDB.modify('posts', 'Timestamp', str(time.asctime( time.localtime(time.time()))), 'PostID', post_id)
-    return redirect(url_for('profile'))
+    blog_id = populateDB.findInfo('posts', post_id, 'postID', fetchOne =True)[1]
+    blog = populateDB.findInfo('blogs', blog_id, 'blogID', fetchOne =True)
+    posts = populateDB.findInfo('posts', blog_id, 'blogID')
+    return render_template('blog.html', username = user_all[2], viewerPostLiked = posts_liked, blog = blog, posts=posts[::-1])
 
 #If you want to put pic in db, make sure to add a pic field in db table
 #PM should ask mr. brown whether is ok use openCV:
