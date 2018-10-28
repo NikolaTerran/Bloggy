@@ -52,9 +52,9 @@ def register():
 #   command2 = 'INSERT INTO registration VALUES("' + username + '", "' + password  + '", "' + request.form['email'] + '")'
 #   c.execute(command2)
     try:
-        populateDB.insert('users', ['profilepic', username, password])
+        populateDB.insert('users', ['profilepic', username, password, ''])
     except:  # as e syntax added in ~python2.5
-        flash("your username is not unique; select a new one") #BUG GOT TO FIX THIS FOR UNIQUE USERNAME
+        flash("your username is not unique; select a new one")
         return redirect(url_for('home'))
 
     if password != pwdCopy:
@@ -106,14 +106,35 @@ def edit_post():
         elif request.form.get('like_id'):
             user_id = populateDB.findInfo('users', user, 'Username', fetchOne =  True)[0]
             post_id = request.form['like_id']
-            votes = populateDB.findInfo('posts', post_id, 'postID', fetchOne = True)[5]
+            postRec = populateDB.findInfo('posts', post_id, 'postID', fetchOne = True)
+            votes = postRec[5]
             print ('liked')
             print (votes)
-            votes += 1
-            populateDB.modify('posts', 'VOTES', votes, 'PostID', post_id)
-            post = populateDB.findInfo('posts', post_id, 'postId')
-            print (post)
-            return redirect(url_for('profile'))
+            postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchone=True)[4]
+            listLikedPosts = postLiked.split(',')
+            if post_id not in listLikedPosts:
+                hasLiked = False
+            else:
+                hasLiked = True
+            if hasLiked:
+                votes -= 1
+                populate.modify('posts', 'VOTES', votes, 'PostID', post_id)
+                listLikedPosts = postsLiked.split(',')
+                listLikedPOsts.remove('post_id')
+                postsLiked = ""
+                for p in listLikedPosts:
+                    postsLiked += p
+                populateDB.modify('users', 'PostsLiked', postsLiked,'UserId', user_id)
+            else:
+                votes += 1
+                populateDB.modify('posts', 'VOTES', votes, 'PostID', post_id)
+                postsLiked += ',' + str(post_id)
+                populateDB.modify('users', 'PostsLiked', postsLiked,'UserId', user_id)
+
+            blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
+            posts = populateDB.findInfo('posts', postRec[1], 'blogID')
+            userInfo = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
+            return render_template('blog.html', userInfo = userInfo, blog = blog, posts=posts[::-1])
         else:
             print ('delete goes here')
     else:
@@ -210,14 +231,14 @@ def profile():
 def blog():
     '''displays each blog for user'''
     blog_id = request.form['blog_id']
-    blog = populateDB.findInfo('blogs', blog_id, 'blogID')
-    user_id = blog[0][1]
-    user_name = populateDB.findInfo('users', user_id, 'UserID', fetchOne = True)[2]
+    blog = populateDB.findInfo('blogs', blog_id, 'blogID',fetchOne=True)
+    user_id = blog[1]
+    userInfo = populateDB.findInfo('users', user_id, 'UserID', fetchOne = True)
     posts = populateDB.findInfo('posts', blog_id, 'blogId')
     print ('blog')
-    print (blog[0][3])
+    print (blog[3])
     print(posts[::-1])
-    return render_template('blog.html', username = user_name, blog = blog, posts=posts[::-1])
+    return render_template('blog.html', userInfo = userInfo, blog = blog, posts=posts[::-1])
 
 # def like():
 #     user = session['user']

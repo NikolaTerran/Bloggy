@@ -187,7 +187,6 @@ DamianW 2018-10-27 11:26
   Made text in textboxes disappear when clicked on, removing need to delete message
   Removed ability to create empty blogs
 ==============================================================================================================================
-
 jeffreyW 2018-10-27 11:50
 ------------------------------------------------------------------------------------------------------------------------------
   implemented named parameters
@@ -209,4 +208,9 @@ cathyC 2018-10-27 15:24
   Added function to edit pre-existing posts, which updates the text and timestamp
   Added a separate page to edit a specific post. Heading cannot be changed
   Added function to like posts, although user can currently like more than once
+==============================================================================================================================
+jeffreyW 2018-10-28 14:37
+------------------------------------------------------------------------------------------------------------------------------
+  I broke add posts some how
+  I think like works how it supposed to
 ==============================================================================================================================

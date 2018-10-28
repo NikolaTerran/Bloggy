@@ -32,7 +32,7 @@ def insert(tableName, info):
     db.commit()
 
 def findInfo(tableName,filterValue,colToFilt, sortCol = None, notEqual = None, fetchOne = None):
-    '''returns entire record with specific value at specific index from specified db table'''
+    '''returns entire record with specific value at specific column from specified db table'''
     if notEqual:
         boolEqual = '!'
     else:
