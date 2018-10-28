@@ -29,19 +29,19 @@ def login():
     '''logs the user in by checking if their login info matches with registered user'''
     username = request.form['usr']
     password = request.form['pwd']
-    user_exists = populateDB.findInfo('users', username, 'username', fetchOne = True)
-    print ('user_exists')
-    print (user_exists)
-    if user_exists:
-        if user_exists[3] == password:
-            session['user'] = username
-            return redirect(url_for('home'))
-        else:
-            flash("password wrong")
-            return render_template('home.html')
-    else:
-        flash("username wrong")
-        return render_template('home.html')
+    if username.find('\'') == -1:
+        user_exists = populateDB.findInfo('users', username, 'username', fetchOne = True)
+        print ('user_exists')
+        print (user_exists)
+        if user_exists:
+            if user_exists[3] == password:
+                session['user'] = username
+                return redirect(url_for('home'))
+            else:
+                flash("password wrong")
+                return render_template('home.html')
+    flash("username wrong")
+    return redirect(url_for('home'))
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
@@ -52,17 +52,17 @@ def register():
 #   command2 = 'INSERT INTO registration VALUES("' + username + '", "' + password  + '", "' + request.form['email'] + '")'
 #   c.execute(command2)
     try:
-        populateDB.insert('users', ['profilepic', username, password, ''])
+        if username.find('\'') == -1 & password.find('\'') == -1:
+            if password == pwdCopy:
+                populateDB.insert('users', ['profilepic', username, password, ''])
+                flash("registration complete, please re-enter your login info");
+            else:
+                flash('passwords do not match')
+        else:
+            flash("apostrophes are not allowed")
     except:  # as e syntax added in ~python2.5
         flash("your username is not unique; select a new one")
-        return redirect(url_for('home'))
-
-    if password != pwdCopy:
-        flash('passwords do not match')
-        return redirect(url_for('home'))
-    else:
-        flash("registration complete, please re-enter your login info");
-        return redirect(url_for('home'))
+    return redirect(url_for('home'))
 
 @app.route('/logout')
 def logout():
