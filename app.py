@@ -130,9 +130,12 @@ def edit_post():
                 populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
 
             blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
+            blog_id = blog[0]
             posts = populateDB.findInfo('posts', postRec[1], 'blogID')
             userInfo = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
-            return render_template('blog.html', username = userInfo[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1])
+            blogs_owned = populateDB.findInfo('blogs', user_id, 'OwnerID')[0]
+            is_owner = blog_id in blogs_owned
+            return render_template('blog.html', username = userInfo[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
         else:
             print ('delete goes here')
     else:
@@ -175,7 +178,9 @@ def post():
     populateDB.insert('posts', poststuff)
     blog = populateDB.findInfo('blogs', blog_id, 'blogID', fetchOne =True)
     posts = populateDB.findInfo('posts', blog_id, 'blogID')
-    return render_template('blog.html', username = user_all[2], viewerPostLiked = posts_liked, blog = blog, posts=posts[::-1])
+    blogs_owned = populateDB.findInfo('blogs', user_id, 'OwnerID')[0]
+    is_owner = blog_id in blogs_owned
+    return render_template('blog.html', username = user_all[2], viewerPostLiked = posts_liked, blog = blog, posts=posts[::-1], owner=is_owner)
 
 @app.route('/edit', methods=['POST', 'GET'])
 def edit():
@@ -191,7 +196,9 @@ def edit():
     blog_id = populateDB.findInfo('posts', post_id, 'postID', fetchOne =True)[1]
     blog = populateDB.findInfo('blogs', blog_id, 'blogID', fetchOne =True)
     posts = populateDB.findInfo('posts', blog_id, 'blogID')
-    return render_template('blog.html', username = user_all[2], viewerPostLiked = posts_liked, blog = blog, posts=posts[::-1])
+    blogs_owned = populateDB.findInfo('blogs', user_all[0], 'OwnerID')[0]
+    is_owner = blog_id in blogs_owned
+    return render_template('blog.html', username = user_all[2], viewerPostLiked = posts_liked, blog = blog, posts=posts[::-1], owner=is_owner)
 
 #If you want to put pic in db, make sure to add a pic field in db table
 #PM should ask mr. brown whether is ok use openCV:
@@ -247,10 +254,12 @@ def blog():
     userInfo = populateDB.findInfo('users', user_id, 'UserID', fetchOne = True)
     viewer = populateDB.findInfo('users', user, 'username', fetchOne = True)[4]
     posts = populateDB.findInfo('posts', blog_id, 'blogId')
+    blogs_owned = populateDB.findInfo('blogs', user_id, 'OwnerID')[0]
+    is_owner = blog_id in blogs_owned
     print ('blog')
     print (blog[3])
     print(posts[::-1])
-    return render_template('blog.html', username = userInfo[2], viewerPostLiked = viewer, blog = blog, posts=posts[::-1])
+    return render_template('blog.html', username = userInfo[2], viewerPostLiked = viewer, blog = blog, posts=posts[::-1], owner=is_owner)
 
 # def like():
 #     user = session['user']
