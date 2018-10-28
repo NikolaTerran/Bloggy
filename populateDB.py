@@ -62,3 +62,7 @@ def findInfo(tableName,filterValue,colToFilt, sortCol = None, notEqual = None, f
 def modify(tableName, colToMod, newVal, filterIndex, filterValue):
      c.execute(("UPDATE {0} SET {1}='{2}' WHERE {3}='{4}'").format(tableName, colToMod, newVal, filterIndex, filterValue))
      db.commit()
+
+def delete(tableName, filterIndex, filterValue):
+    c.execute(("DELETE FROM {0} WHERE {1} = '{2}'").format(tableName, filterIndex, filterValue))
+    db.commit()

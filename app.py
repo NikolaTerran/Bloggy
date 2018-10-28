@@ -96,6 +96,7 @@ def edit_post():
     '''allows the user to edit existing posts'''
     if 'user' in session:
         user = session['user']
+        user_id = populateDB.findInfo('users', user, 'Username', fetchOne =  True)[0]
         if request.form.get('edit_id'):
             post_id = request.form['edit_id']
             # id = populateDB.findInfo('users', user, 2)[0]
@@ -104,7 +105,6 @@ def edit_post():
             print (post)
             return render_template('edit_post.html',user = user, post=post[0])
         elif request.form.get('like_id'):
-            user_id = populateDB.findInfo('users', user, 'Username', fetchOne =  True)[0]
             post_id = request.form['like_id']
             postRec = populateDB.findInfo('posts', post_id, 'postID', fetchOne = True)
             votes = postRec[5]
@@ -137,7 +137,23 @@ def edit_post():
             is_owner = blog_id in blogs_owned
             return render_template('blog.html', username = userInfo[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
         else:
-            print ('delete goes here')
+            post_id = request.form['delete_id']
+            postRec = populateDB.findInfo('posts', post_id, 'postID', fetchOne = True)
+            blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
+            blog_id = blog[0]
+            userInfo = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
+            blogs_owned = populateDB.findInfo('blogs', user_id, 'OwnerID')[0]
+            is_owner = blog_id in blogs_owned
+            populateDB.delete('posts', 'PostID', post_id)
+            posts = populateDB.findInfo('posts', postRec[1], 'blogID')
+            postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[4]
+            listLikedPosts = postsLiked.split(',')
+            postLiked = ""
+            for p in listLikedPosts:
+                if p != post_id:
+                    postsLiked += p + ','
+            populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
+            return render_template('blog.html', username = userInfo[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
     else:
         return redirect(url_for('home'))
 
