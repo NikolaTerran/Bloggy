@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<h1> {{userInfo[2]}}'s {{blog[3]}}</h1>
+<h1> {{username}}'s {{blog[3]}}</h1>
 <h2> Posts </h2>
   {% for post in posts %}
     <h3>{{post[6]}}</h3>
@@ -10,11 +10,10 @@
     <br>
     <form action="/edit_post" method = "POST">
       <button type="submit" name = "like_id" value = {{post[0]}}>
-        {% set list = userInfo[4].split(',') %}
-        {% if 'priority' in data %}
-          Like
-        {% else %}
+        {% if post[0]|string in viewerPostLiked.split(',') %}
           Unlike
+        {% else %}
+          Like
         {% endif %}
       </button><br>
       <button type="submit" name="edit_id" value={{post[0]}}>Edit</button><br>

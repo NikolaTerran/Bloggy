@@ -110,31 +110,29 @@ def edit_post():
             votes = postRec[5]
             print ('liked')
             print (votes)
-            postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchone=True)[4]
-            listLikedPosts = postLiked.split(',')
-            if post_id not in listLikedPosts:
-                hasLiked = False
-            else:
-                hasLiked = True
+            postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[4]
+            listLikedPosts = postsLiked.split(',')
+            hasLiked = post_id in listLikedPosts
+
             if hasLiked:
                 votes -= 1
-                populate.modify('posts', 'VOTES', votes, 'PostID', post_id)
+                populateDB.modify('posts', 'VOTES', votes, 'PostID', post_id)
                 listLikedPosts = postsLiked.split(',')
-                listLikedPOsts.remove('post_id')
+                listLikedPosts.remove(post_id)
                 postsLiked = ""
                 for p in listLikedPosts:
                     postsLiked += p
-                populateDB.modify('users', 'PostsLiked', postsLiked,'UserId', user_id)
+                populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
             else:
                 votes += 1
                 populateDB.modify('posts', 'VOTES', votes, 'PostID', post_id)
                 postsLiked += ',' + str(post_id)
-                populateDB.modify('users', 'PostsLiked', postsLiked,'UserId', user_id)
+                populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
 
             blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
             posts = populateDB.findInfo('posts', postRec[1], 'blogID')
             userInfo = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
-            return render_template('blog.html', userInfo = userInfo, blog = blog, posts=posts[::-1])
+            return render_template('blog.html', username = userInfo[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1])
         else:
             print ('delete goes here')
     else:
@@ -169,8 +167,11 @@ def post():
     user = session['user']
     user_id = populateDB.findInfo('users', user, 'username', fetchOne = True)[0]
     head = request.form['heading']
-    des = request.form['text']
+    text = request.form['text']
     blog_id = request.form['blog_id']
+    poststuff = [blog_id, user_id, text, str(time.asctime( time.localtime(time.time()))), 0, head]
+    populateDB.insert('posts', poststuff)
+    return redirect(url_for('profile'))
 
 @app.route('/edit', methods=['POST', 'GET'])
 def edit():
@@ -207,7 +208,7 @@ def edit():
     ###     </tr>
     ### </table>
     ### """
-    return redirect(url_for('profile'))
+
 
 @app.route('/profile', methods=['POST', 'GET'])
 def profile():
@@ -238,7 +239,7 @@ def blog():
     print ('blog')
     print (blog[3])
     print(posts[::-1])
-    return render_template('blog.html', userInfo = userInfo, blog = blog, posts=posts[::-1])
+    return render_template('blog.html', username = userInfo[2], viewerPostLiked = userInfo[4], blog = blog, posts=posts[::-1])
 
 # def like():
 #     user = session['user']
