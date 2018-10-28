@@ -1,5 +1,11 @@
 <!DOCTYPE = html>
 <html>
+	{% block nav %}
+		<a href="/">Home</a>&nbsp;
+		<a href="/profile">Your Profile</a>&nbsp;
+		<a href="/create">Create a New Blog</a>&nbsp;
+		<a href="/usernav">Other Users</a>&nbsp;<br>
+	{% endblock %}
 	{%block title%}<title>Create a new blog!</title>{%endblock title%}
 
 	{%block header%}<b><h3>Create a new blog!</h3></b>{%endblock header%}

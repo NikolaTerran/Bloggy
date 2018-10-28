@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html>
-<h1> Welcome to {{username}}'s page!
+{% block nav %}
+  <a href="/">Home</a>&nbsp;
+  <a href="/profile">Your Profile</a>&nbsp;
+  <a href="/create">Create a New Blog</a>&nbsp;
+  <a href="/usernav">Other Users</a>&nbsp;<br>
+{% endblock %}
+<h1> Welcome to {{username}}'s page!</h1>
   <h1>{{username}}'s Blogs:</h1>
   {% for blog in blogs %}
     <form action="/blog" method = "POST">
