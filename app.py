@@ -121,7 +121,7 @@ def edit_post():
                 listLikedPosts.remove(post_id)
                 postsLiked = ""
                 for p in listLikedPosts:
-                    postsLiked += p
+                    postsLiked += p + ','
                 populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
             else:
                 votes += 1
