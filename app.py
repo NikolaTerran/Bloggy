@@ -231,15 +231,17 @@ def profile():
 @app.route('/blog', methods=['POST', 'GET'])
 def blog():
     '''displays each blog for user'''
+    user = session['user']
     blog_id = request.form['blog_id']
     blog = populateDB.findInfo('blogs', blog_id, 'blogID',fetchOne=True)
     user_id = blog[1]
     userInfo = populateDB.findInfo('users', user_id, 'UserID', fetchOne = True)
+    viewer = populateDB.findInfo('users', user, 'username', fetchOne = True)[4]
     posts = populateDB.findInfo('posts', blog_id, 'blogId')
     print ('blog')
     print (blog[3])
     print(posts[::-1])
-    return render_template('blog.html', username = userInfo[2], viewerPostLiked = userInfo[4], blog = blog, posts=posts[::-1])
+    return render_template('blog.html', username = userInfo[2], viewerPostLiked = viewer, blog = blog, posts=posts[::-1])
 
 # def like():
 #     user = session['user']
