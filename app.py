@@ -249,7 +249,7 @@ def look():
     else:
         results = populateDB.findInfo('users', name, 'Username', asSubstring = True)
         print(results)
-    return render_template("search.html", typer = type + 's', searcher = results)
+    return render_template("search.html", typer = type + 's', results = results)
 #If you want to put pic in db, make sure to add a pic field in db table
 #PM should ask mr. brown whether is ok use openCV:
 #stackoverflow://to.com/questions/41586429/opencv-saving-images-to-a-particular-folder-of-choice/41587740
