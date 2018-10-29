@@ -156,14 +156,18 @@ def edit_post():
             is_owner = user_id in blog
             users = populateDB.findInfo('users', 0, "UserID", notEqual =True)
             for user in users:
-                user_id = users[0]
+                user_id = user[0]
                 postsLiked = user[4]
                 listLikedPosts = postsLiked.split(',')
-                listLikedPosts.remove(post_id)
+                if post_id in listLikedPosts:
+                    listLikedPosts.remove(post_id)
                 postsLiked = ""
                 for p in listLikedPosts:
                         postsLiked += p + ','
-                populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
+                print(listLikedPosts)
+                print(user_id)
+                print(postsLiked)
+                populateDB.modify('users', 'LikedPosts', postsLiked, 'UserId', user_id)
             populateDB.delete('posts', 'PostID', post_id)
             posts = populateDB.findInfo('posts', postRec[1], 'blogID')
             postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[4]
@@ -238,13 +242,14 @@ def edit():
 def look():
     name = request.form['search_value']
     type = request.form['searchtype']
-    if name == "Blog":
-        results = populateDB.findInfo(name, search_value, BlogTitle)
-    elif name == "Post":
-        results = populateDB.findinfo(name, search_value, Heading)
-    elif name == "User":
-        results = populateDB.findinfo(name, search_value, Username)
-    return render_template("search.html", typer = type, searcher = results)
+    if type == "Blog":
+        results = populateDB.findInfo('blogs',name, 'BlogTitle', asSubstring = True)
+    elif type == "Post":
+        results = populateDB.findInfo('posts',name, 'Heading', asSubstring = True)
+    else:
+        results = populateDB.findInfo('users', name, 'Username', asSubstring = True)
+        print(results)
+    return render_template("search.html", typer = type + 's', searcher = results)
 #If you want to put pic in db, make sure to add a pic field in db table
 #PM should ask mr. brown whether is ok use openCV:
 #stackoverflow://to.com/questions/41586429/opencv-saving-images-to-a-particular-folder-of-choice/41587740

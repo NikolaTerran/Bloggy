@@ -31,7 +31,7 @@ def insert(tableName, info):
                                                           values  ))
     db.commit()
 
-def findInfo(tableName,filterValue,colToFilt, sortCol = None, notEqual = None, fetchOne = None):
+def findInfo(tableName,filterValue,colToFilt, sortCol = None, notEqual = None, fetchOne = None, asSubstring= False):
     '''returns entire record with specific value at specific column from specified db table'''
     if notEqual:
         boolEqual = '!'
@@ -43,8 +43,15 @@ def findInfo(tableName,filterValue,colToFilt, sortCol = None, notEqual = None, f
     else:
         sortQuery = ''
 
-    command = "SELECT * FROM  '{0}'  WHERE {1} {3}= '{2}'".format(tableName,colToFilt,filterValue, boolEqual)
+    if asSubstring:
+        filterValue = '%' + filterValue + '%'
+        eq = 'LIKE'
+    else:
+        eq = '='
+
+    command = "SELECT * FROM  '{0}'  WHERE {1} {3}{4} '{2}'".format(tableName,colToFilt,filterValue, boolEqual, eq)
     command += sortQuery
+    print(command)
     c.execute(command)
 
     listInfo = []
