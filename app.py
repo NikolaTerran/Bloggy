@@ -183,13 +183,19 @@ def make():
 def post():
     '''adds a post'''
     print ('submit called...')
+    head = request.form['heading']
+    text = request.form['text']
+    blog_id = request.form['blog_id']
     user = session['user']
     user_all = populateDB.findInfo('users', user, 'username', fetchOne = True)
     user_id = user_all[0]
     posts_liked = user_all[4]
-    head = request.form['heading']
-    text = request.form['text']
-    blog_id = request.form['blog_id']
+    if head.find('\'') == -1:
+        index = head.find('\'')
+        head = head[:index] + '\'' + head[index:]
+    if text.find('\'') == -1:
+        index = text.find('\'')
+        text = text[:index] + '\'' + text[index:]
     poststuff = [blog_id, user_id, text, str(time.asctime( time.localtime(time.time()))), 0, head]
     populateDB.insert('posts', poststuff)
     blog = populateDB.findInfo('blogs', blog_id, 'blogID', fetchOne =True)
@@ -302,6 +308,41 @@ def search():
 @app.route('/photo')
 def photo():
     return request.form['pic']
+
+@app.route('/food')
+def food():
+    blogs = populateDB.findInfo('blogs','Food','Category')
+    return render_template('food.html', blogs=blogs)
+
+@app.route('/tech')
+def tech():
+    blogs = populateDB.findInfo('blogs','Tech','Category')
+    return render_template('tech.html', blogs=blogs)
+
+@app.route('/sports')
+def sports():
+    blogs = populateDB.findInfo('blogs','Sports','Category')
+    return render_template('sports.html', blogs=blogs)
+
+@app.route('/news')
+def news():
+    blogs = populateDB.findInfo('blogs','News','Category')
+    return render_template('news.html', blogs=blogs)
+
+@app.route('/life')
+def life():
+    blogs = populateDB.findInfo('blogs','Life','Category')
+    return render_template('life.html', blogs=blogs)
+
+@app.route('/music')
+def music():
+    blogs = populateDB.findInfo('blogs','Music','Category')
+    return render_template('music.html', blogs=blogs)
+
+@app.route('/miscellaneous')
+def miscellaneous():
+    blogs = populateDB.findInfo('blogs','Miscellaneous','Category')
+    return render_template('miscellaneous.html', blogs=blogs)
 #@app.route('/redirect')
 #def findblog():
 
