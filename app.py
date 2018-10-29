@@ -241,6 +241,8 @@ def look():
     type = request.form['searchtype']
     if type == "Blog":
         results = populateDB.findInfo('blogs',name, 'BlogTitle', asSubstring = True)
+        print ('results here')
+        print (results)
     elif type == "Post":
         results = populateDB.findInfo('posts',name, 'Heading', asSubstring = True)
     else:
