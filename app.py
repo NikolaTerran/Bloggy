@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 #import db_builder
 import populateDB
-#from passlib.hash import sha256_crypt
+from passlib.hash import sha256_crypt
 import time
 import sqlite3
 import os
@@ -46,7 +46,8 @@ def login():
     print ('user_exists')
     print (user_exists)
     if user_exists:
-        if user_exists[3] == password:
+        print (sha256_crypt.verify(password, user_exists[3]))
+        if sha256_crypt.verify(password, user_exists[3]):
             session['user'] = username
             return redirect(url_for('home'))
         else:
@@ -64,7 +65,7 @@ def register():
     if username.find("'") == -1:
         try:
                 if password == pwdCopy:
-                    populateDB.insert('users', ['profilepic', username, password, ''])
+                    populateDB.insert('users', ['profilepic', username, sha256_crypt.encrypt(password), ''])
                     flash("registration complete, please re-enter your login info");
                 else:
                     flash('passwords do not match')
@@ -237,7 +238,13 @@ def edit():
 def look():
     name = request.form['search_value']
     type = request.form['searchtype']
-    return render_template("search.html", typer = type, searcher = name)
+    if name == "Blog":
+        results = populateDB.findInfo(name, search_value, BlogTitle)
+    elif name == "Post":
+        results = populateDB.findinfo(name, search_value, Heading)
+    elif name == "User":
+        results = populateDB.findinfo(name, search_value, Username)
+    return render_template("search.html", typer = type, searcher = results)
 #If you want to put pic in db, make sure to add a pic field in db table
 #PM should ask mr. brown whether is ok use openCV:
 #stackoverflow://to.com/questions/41586429/opencv-saving-images-to-a-particular-folder-of-choice/41587740
