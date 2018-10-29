@@ -253,15 +253,17 @@ def profile():
         request.form['user_id']
         id = request.form['user_id']
         user = populateDB.findInfo('users', id, 'UserID', fetchOne = True)[2]
+        is_owner = False
         print ('user here')
         print (user)
     except:
         user = session['user']
         id = populateDB.findInfo('users', user, 'username', fetchOne =  True)[0]
+        is_owner = True
     print(id)
     blogs = populateDB.findInfo('blogs', id, 'ownerID')
     print(blogs)
-    return render_template('profile.html', username = user, blogs=blogs[::-1])
+    return render_template('profile.html', username = user, blogs=blogs[::-1], owner = is_owner)
 
 @app.route('/blog', methods=['POST', 'GET'])
 def blog():
@@ -279,6 +281,28 @@ def blog():
     print (blog[3])
     print(posts[::-1])
     return render_template('blog.html', username = userInfo[2], viewerPostLiked = viewer[4], blog = blog, posts=posts[::-1], owner=is_owner)
+
+@app.route('/delete_blog', methods=['POST', 'GET'])
+def delete():
+    blog_id = request.form['blog_id']
+    num_users = populateDB.numRows('users')[0]
+    print ('num_users')
+    for user_id in range(1, num_users):
+        postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[4]
+        listLikedPosts = postsLiked.split(',')
+        postsLiked = ""
+        print (listLikedPosts)
+        for p in listLikedPosts:
+            try:
+                blog_origin = populateDB.findInfo('posts', p, 'postID', fetchOne=True)[1]
+                if blog_id != blog_origin:
+                    postsLiked += p + ','
+            except:
+                postsLiked = postsLiked
+        populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
+    populateDB.delete('posts', 'BlogID', blog_id)
+    populateDB.delete('blogs', 'BlogID', blog_id)
+    return redirect(url_for('profile'))
 
 # def like():
 #     user = session['user']

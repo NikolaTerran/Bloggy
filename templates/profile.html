@@ -13,7 +13,12 @@
       <b>{{blog[3]}}</b><br>
       <i>{{blog[4]}}</i><br>
       Category: {{blog[5]}}<br>
-      <button type="submit" name="blog_id" value={{blog[0]}}>view blog</button><br><br>
+      <button type="submit" name="blog_id" value={{blog[0]}}>view blog</button><br>
     </form>
+    {% if owner %}
+      <form action="/delete_blog" method="POST">
+        <button type="submit" name="blog_id" value={{blog[0]}}>delete blog</button><br><br><br>
+      </form>
+    {% endif %}
   {% endfor %}
 </html>
