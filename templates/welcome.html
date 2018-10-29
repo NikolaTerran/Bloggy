@@ -27,15 +27,15 @@
 			<a href="/miscellaneous">Miscellaneous</a>
 	</div>
     </br>
-    <form action="/search", id = "search">
+    <form action="/search", method = "POST">
 		Looking for something? <input type = "text" name="search_value" placeholder = "Enter post here"></br>
         <input type="submit" value="search">
-    </form>
-		<select name = 'searchtype' form = "search">
-				<option value = "User" name = 'searchtype'>User</option>
-				<option value = "Blog" name = 'searchtype'>Blog</option>
-				<option value = "Post" name = 'searchtype'>Post</option>
+		<select name = 'searchtype'>
+				<option value = "User">User</option>
+				<option value = "Blog">Blog</option>
+				<option value = "Post">Post</option>
 			</select>
+		</form>
 
 	{%block login%}
 		<br><br><br><a href = '/logout'><input type = "button" value="logout"></input></a>
