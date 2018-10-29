@@ -149,7 +149,7 @@ def edit_post():
             postRec = populateDB.findInfo('posts', post_id, 'postID', fetchOne = True)
             blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
             owner = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
-            is_owner = user_id in blog
+            is_owner = user_id == blog[1]
             users = populateDB.findInfo('users', 0, "UserID", notEqual =True)
             for user in users:
                 user_id = user[0]
@@ -284,7 +284,6 @@ def profile():
         id = request.form['user_id']
         user = populateDB.findInfo('users', id, 'UserID', fetchOne = True)[2]
         is_owner = False
-        print ('user here')
         print (user)
     except:
         user = session['user']
@@ -306,7 +305,7 @@ def blog():
     viewer = populateDB.findInfo('users', user, 'username', fetchOne = True)
     viewerID = viewer[0]
     posts = populateDB.findInfo('posts', blog_id, 'blogId')
-    is_owner = viewerID in blog
+    is_owner = viewerID == blog[1]
     print ('blog')
     print (blog[3])
     print(posts[::-1])
