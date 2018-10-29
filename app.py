@@ -40,7 +40,7 @@ def login():
     '''logs the user in by checking if their login info matches with registered user'''
     username = request.form['usr']
     password = request.form['pwd']
-    user_exists = populateDB.findInfo('users', username, 'username', fetchOne = True)
+    user_exists = populateDB.findInfo('users', checkApos(username), 'username', fetchOne = True)
     print ('user_exists')
     print (user_exists)
     if user_exists:
