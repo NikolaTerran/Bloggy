@@ -51,6 +51,7 @@ def findInfo(tableName,filterValue,colToFilt, sortCol = None, notEqual = None, f
 
     command = "SELECT * FROM  '{0}'  WHERE {1} {3}{4} '{2}'".format(tableName,colToFilt,filterValue, boolEqual, eq)
     command += sortQuery
+    print(command)
     c.execute(command)
 
     listInfo = []
