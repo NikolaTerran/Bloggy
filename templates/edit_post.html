@@ -14,7 +14,7 @@
 	<!-- display all posts with edit options -->
 		<b>Post heading: </b> {{post[6]}}<br>
 		<form action="/edit" method = "POST">
-			<textarea name="text" rows="10" cols="30" placeholder = "{{post[3]}}"></textarea>
+			<textarea name="text" rows="10" cols="30">"{{post[3]}}""</textarea>
 			<br>
 			<button type="submit" name="post_id" value={{post[0]}}>edit!</button>
 		</form>

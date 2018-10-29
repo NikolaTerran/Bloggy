@@ -18,8 +18,10 @@ def checkApos(string):
         i = string.find("'", i + 1)
         if i == -1: break
         aposIndexes.append(i)
+    j = 0
     for index in aposIndexes:
-        string = string[:index] + "'" + string[index:]
+        string = string[:index +j ] + "'" + string[index+ j:]
+        j += 1
     return string
 
 
@@ -108,6 +110,7 @@ def edit_post():
         user_id = user[0]
         if request.form.get('edit_id'):
             post_id = request.form['edit_id']
+            print(post_id)
             # id = populateDB.findInfo('users', user, 2)[0]
             post = populateDB.findInfo('posts', post_id, 'postId')
             print ('post clicked')
@@ -135,7 +138,7 @@ def edit_post():
             else:
                 votes += 1
                 populateDB.modify('posts', 'VOTES', votes, 'PostID', post_id)
-                postsLiked += ',' + str(post_id)
+                postsLiked += str(post_id) + ','
                 populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
 
             blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
@@ -209,6 +212,7 @@ def edit():
     viewer = populateDB.findInfo('users', user, 'username', fetchOne = True)
     posts_liked = viewer[4]
     text = checkApos(request.form['text'])
+    print(text)
     post_id = request.form['post_id']
     populateDB.modify('posts', 'Content', text, 'PostID', post_id)
     populateDB.modify('posts', 'Timestamp', str(time.asctime( time.localtime(time.time()))), 'PostID', post_id)
@@ -219,6 +223,11 @@ def edit():
     is_owner = viewerID in blog
     return render_template('blog.html', username = viewer[2], viewerPostLiked = posts_liked, blog = blog, posts=posts[::-1], owner=is_owner)
 
+@app.route('/search', methods =['POST', 'GET'])
+def look():
+    name = request.form['search_value']
+    type = request.form['searchtype']
+    return render_template("search.html", typer = type, searcher = name)
 #If you want to put pic in db, make sure to add a pic field in db table
 #PM should ask mr. brown whether is ok use openCV:
 #stackoverflow://to.com/questions/41586429/opencv-saving-images-to-a-particular-folder-of-choice/41587740
@@ -320,10 +329,6 @@ def users():
     print (users)
     return render_template('users.html', users=users)
 
-@app.route('/search')
-def search():
-    flash("post not found")
-    return render_template('welcome.html',user=session['user'])
 
 #link this to database
 @app.route('/photo')
