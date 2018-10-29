@@ -11,6 +11,17 @@ app.secret_key = os.urandom(8)
 
 ##command = "CREATE TABLE registration(username TEXT,password TEXT,email TEXT)"
 ##c.execute(command)    #run SQL statement
+def checkApos(string):
+    i = -1
+    aposIndexes = []
+    while True:
+        i = username.find("'", i + 1)
+        if i == -1: break
+        aposIndex.append[i]
+    for index in aposIndex:
+        string = string[:index] + "'" + string[index:]
+    return string
+
 
 @app.route('/')
 def home():
@@ -29,17 +40,16 @@ def login():
     '''logs the user in by checking if their login info matches with registered user'''
     username = request.form['usr']
     password = request.form['pwd']
-    if username.find('\'') == -1:
-        user_exists = populateDB.findInfo('users', username, 'username', fetchOne = True)
-        print ('user_exists')
-        print (user_exists)
-        if user_exists:
-            if user_exists[3] == password:
-                session['user'] = username
-                return redirect(url_for('home'))
-            else:
-                flash("password wrong")
-                return render_template('home.html')
+    user_exists = populateDB.findInfo('users', username, 'username', fetchOne = True)
+    print ('user_exists')
+    print (user_exists)
+    if user_exists:
+        if user_exists[3] == password:
+            session['user'] = username
+            return redirect(url_for('home'))
+        else:
+            flash("password wrong")
+            return render_template('home.html')
     flash("username wrong")
     return redirect(url_for('home'))
 
@@ -49,17 +59,13 @@ def register():
     password = request.form['new_pwd'].strip()
     username= request.form['new_usr'].strip()
     pwdCopy = request.form['re_pwd'].strip()
-#   command2 = 'INSERT INTO registration VALUES("' + username + '", "' + password  + '", "' + request.form['email'] + '")'
-#   c.execute(command2)
+    username = checkApos(username)
     try:
-        if username.find('\'') == -1 & password.find('\'') == -1:
             if password == pwdCopy:
                 populateDB.insert('users', ['profilepic', username, password, ''])
                 flash("registration complete, please re-enter your login info");
             else:
                 flash('passwords do not match')
-        else:
-            flash("apostrophes are not allowed")
     except:  # as e syntax added in ~python2.5
         flash("your username is not unique; select a new one")
     return redirect(url_for('home'))
@@ -130,28 +136,19 @@ def edit_post():
                 populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
 
             blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
-            blog_id = blog[0]
             posts = populateDB.findInfo('posts', postRec[1], 'blogID')
             userInfo = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
-            blogs_owned = populateDB.findInfo('blogs', user_id, 'OwnerID')[0]
-            is_owner = blog_id in blogs_owned
+            is_owner = viewerID in blog
             return render_template('blog.html', username = userInfo[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
         else:
             post_id = request.form['delete_id']
             postRec = populateDB.findInfo('posts', post_id, 'postID', fetchOne = True)
             blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
-            blog_id = blog[0]
             userInfo = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
-            blogs_owned = populateDB.findInfo('blogs', user_id, 'OwnerID')[0]
-            is_owner = blog_id in blogs_owned
+            is_owner = viewerID in blog
             populateDB.delete('posts', 'PostID', post_id)
             posts = populateDB.findInfo('posts', postRec[1], 'blogID')
             postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[4]
-            listLikedPosts = postsLiked.split(',')
-            postLiked = ""
-            for p in listLikedPosts:
-                if p != post_id:
-                    postsLiked += p + ','
             populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
             return render_template('blog.html', username = userInfo[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
     else:
@@ -183,25 +180,20 @@ def make():
 def post():
     '''adds a post'''
     print ('submit called...')
-    head = request.form['heading']
-    text = request.form['text']
+    head = checkApos(request.form['heading'])
+    text = checkApos(request.form['text'])
+
     blog_id = request.form['blog_id']
     user = session['user']
     user_all = populateDB.findInfo('users', user, 'username', fetchOne = True)
     user_id = user_all[0]
     posts_liked = user_all[4]
-    if head.find('\'') == -1:
-        index = head.find('\'')
-        head = head[:index] + '\'' + head[index:]
-    if text.find('\'') == -1:
-        index = text.find('\'')
-        text = text[:index] + '\'' + text[index:]
+
     poststuff = [blog_id, user_id, text, str(time.asctime( time.localtime(time.time()))), 0, head]
     populateDB.insert('posts', poststuff)
     blog = populateDB.findInfo('blogs', blog_id, 'blogID', fetchOne =True)
     posts = populateDB.findInfo('posts', blog_id, 'blogID')
-    blogs_owned = populateDB.findInfo('blogs', user_id, 'OwnerID')[0]
-    is_owner = blog_id in blogs_owned
+    is_owner = viewerID in blog
     return render_template('blog.html', username = user_all[2], viewerPostLiked = posts_liked, blog = blog, posts=posts[::-1], owner=is_owner)
 
 @app.route('/edit', methods=['POST', 'GET'])
@@ -211,15 +203,14 @@ def edit():
     user = session['user']
     user_all = populateDB.findInfo('users', user, 'username', fetchOne = True)
     posts_liked = user_all[4]
-    text = request.form['text']
+    text = checkApos(request.form['text'])
     post_id = request.form['post_id']
     populateDB.modify('posts', 'Content', text, 'PostID', post_id)
     populateDB.modify('posts', 'Timestamp', str(time.asctime( time.localtime(time.time()))), 'PostID', post_id)
     blog_id = populateDB.findInfo('posts', post_id, 'postID', fetchOne =True)[1]
     blog = populateDB.findInfo('blogs', blog_id, 'blogID', fetchOne =True)
     posts = populateDB.findInfo('posts', blog_id, 'blogID')
-    blogs_owned = populateDB.findInfo('blogs', user_all[0], 'OwnerID')[0]
-    is_owner = blog_id in blogs_owned
+    is_owner = viewerID in blog
     return render_template('blog.html', username = user_all[2], viewerPostLiked = posts_liked, blog = blog, posts=posts[::-1], owner=is_owner)
 
 #If you want to put pic in db, make sure to add a pic field in db table
@@ -274,14 +265,14 @@ def blog():
     blog = populateDB.findInfo('blogs', blog_id, 'blogID',fetchOne=True)
     user_id = blog[1]
     userInfo = populateDB.findInfo('users', user_id, 'UserID', fetchOne = True)
-    viewer = populateDB.findInfo('users', user, 'username', fetchOne = True)[4]
+    viewer = populateDB.findInfo('users', user, 'username', fetchOne = True)
+    viewerID = viewer[0]
     posts = populateDB.findInfo('posts', blog_id, 'blogId')
-    blogs_owned = populateDB.findInfo('blogs', user_id, 'OwnerID')[0]
-    is_owner = blog_id in blogs_owned
+    is_owner = viewerID in blog
     print ('blog')
     print (blog[3])
     print(posts[::-1])
-    return render_template('blog.html', username = userInfo[2], viewerPostLiked = viewer, blog = blog, posts=posts[::-1], owner=is_owner)
+    return render_template('blog.html', username = userInfo[2], viewerPostLiked = viewer[4], blog = blog, posts=posts[::-1], owner=is_owner)
 
 # def like():
 #     user = session['user']
