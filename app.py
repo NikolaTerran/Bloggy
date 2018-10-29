@@ -135,10 +135,13 @@ def edit_post():
                 populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
 
             blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
+            print(blog)
             posts = populateDB.findInfo('posts', postRec[1], 'blogID')
-            owner = populateDB.findInfo('users', blog[0], 'UserID', fetchOne = True)
+            print(posts)
+            owner = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
             # viewerID = viewer[0]
-            is_owner = user_id == blog[0]
+            is_owner = user_id == blog[1]
+            print(owner)
             return render_template('blog.html', username = owner[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
         else:
             #deletes post
