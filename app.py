@@ -298,7 +298,7 @@ def delete():
                 if blog_id != blog_origin:
                     postsLiked += p + ','
             except:
-                postsLiked = postsLiked
+                print ('excepted')
         populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
     populateDB.delete('posts', 'BlogID', blog_id)
     populateDB.delete('blogs', 'BlogID', blog_id)
