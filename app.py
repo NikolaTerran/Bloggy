@@ -1,7 +1,81 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 #import db_builder
 from util import populateDB
-from util import functions
+from util import functions#Contains functions to populate the database
+
+
+import sqlite3   #enable control of an sqlite database
+
+DB_FILE="blogs.db"
+
+db = sqlite3.connect(DB_FILE, check_same_thread=False) #open if file exists, otherwise create
+c = db.cursor()               #facilitate db ops
+
+
+#info is a list of fieldValues in order without primary key
+def insert(tableName, info):
+    '''inserts data into certain table, taking info as a list of parameters'''
+    # collect Column Data Names in strings
+    c.execute('PRAGMA TABLE_INFO({})'.format(tableName))
+    colNames = ''
+    i = 0
+    for cols in c.fetchall():
+        if i == 0:
+            i += 1 # primary key will update itself
+        else:
+            colNames += "'" + cols[1] + "'"+ ','
+    colNames = colNames[:-1]
+    values = ''
+    for val in info:
+        values += "'" + str(val) + "'" + ","
+    values = values[:-1]
+    c.execute("INSERT INTO {0}({1}) VALUES ({2})".format(tableName,
+                                                          colNames ,
+                                                          values  ))
+    db.commit()
+
+def findInfo(tableName,filterValue,colToFilt, sortCol = None, notEqual = None, fetchOne = None, asSubstring= False):
+    '''returns entire record with specific value at specific column from specified db table'''
+    if notEqual:
+        boolEqual = '!'
+    else:
+        boolEqual = ''
+
+    if sortCol:
+        sortQuery = 'ORDER BY {}'.format(sortCol)
+    else:
+        sortQuery = ''
+
+    if asSubstring:
+        filterValue = '%' + filterValue + '%'
+        eq = 'LIKE'
+    else:
+        eq = '='
+
+    command = "SELECT * FROM  '{0}'  WHERE {1} {3}{4} '{2}'".format(tableName,colToFilt,filterValue, boolEqual, eq)
+    command += sortQuery
+    print(command)
+    c.execute(command)
+
+    listInfo = []
+    if fetchOne:
+        info = c.fetchone()
+    else:
+        info = c.fetchall()
+
+    if info:
+        for col in info:
+            #print(col)-
+            listInfo.append(col)
+    return listInfo
+
+def modify(tableName, colToMod, newVal, filterIndex, filterValue):
+    c.execute(("UPDATE {0} SET {1}='{2}' WHERE {3}='{4}'").format(tableName, colToMod, newVal, filterIndex, filterValue))
+    db.commit()
+
+def delete(tableName, filterIndex, filterValue):
+    c.execute(("DELETE FROM {0} WHERE {1} = '{2}'").format(tableName, filterIndex, filterValue))
+    db.commit()
 from passlib.hash import sha256_crypt
 import time
 import sqlite3
@@ -29,10 +103,8 @@ def home():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     '''logs the user in by checking if their login info matches with registered user'''
-    ##retrieves inputted information
-    username = request.form['usr'].strip()
-    password = request.form['pwd'].strip()
-    #checks for existence
+    username = request.form['usr']
+    password = request.form['pwd']
     user_exists = populateDB.findInfo('users', functions.checkApos(username), 'username', fetchOne = True)
     print ('user_exists')
     print (user_exists)
@@ -50,11 +122,9 @@ def login():
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     '''registers new account for user'''
-    #retrives info
     password = request.form['new_pwd'].strip()
     username= request.form['new_usr'].strip()
     pwdCopy = request.form['re_pwd'].strip()
-    #handles apostrophes
     if username.find("'") == -1:
         try:
                 if password == pwdCopy:
@@ -62,7 +132,7 @@ def register():
                     flash("registration complete, please re-enter your login info");
                 else:
                     flash('passwords do not match')
-        except:
+        except:  # as e syntax added in ~python2.5
             flash("your username is not unique; select a new one")
     else:
         flash("pick a username without apostrophes")
@@ -82,7 +152,6 @@ def logout():
 @app.route('/add_post', methods=['POST', 'GET'])
 def add_post():
     '''allows the user to add more posts'''
-    #checks to see if user is logged in
     if 'user' in session:
         user = session['user']
         blog_id = request.form['add_post']
@@ -117,10 +186,10 @@ def edit_post():
             votes = postRec[5]
             print ('liked')
             print (votes)
-            postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[1]
+            postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[4]
             listLikedPosts = postsLiked.split(',')
             hasLiked = post_id in listLikedPosts
-            #Handles liking
+
             if hasLiked:
                 votes -= 1
                 populateDB.modify('posts', 'VOTES', votes, 'PostID', post_id)
@@ -151,7 +220,7 @@ def edit_post():
             users = populateDB.findInfo('users', 0, "UserID", notEqual =True)
             for user in users:
                 user_id = user[0]
-                postsLiked = user[1]
+                postsLiked = user[4]
                 listLikedPosts = postsLiked.split(',')
                 if post_id in listLikedPosts:
                     listLikedPosts.remove(post_id)
@@ -164,7 +233,7 @@ def edit_post():
                 populateDB.modify('users', 'LikedPosts', postsLiked, 'UserId', user_id)
             populateDB.delete('posts', 'PostID', post_id)
             posts = populateDB.findInfo('posts', postRec[1], 'blogID')
-            postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[1]
+            postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[4]
             populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
             return render_template('blog.html', username = owner[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
     else:
@@ -197,13 +266,13 @@ def post():
     '''adds a post'''
     print ('submit called...')
     head = functions.checkApos(request.form['heading'])
-    text = (request.form['text'])
+    text = functions.checkApos(request.form['text'])
 
     blog_id = request.form['blog_id']
     user = session['user']
     user_all = populateDB.findInfo('users', user, 'username', fetchOne = True)
     user_id = user_all[0]
-    posts_liked = user_all[1]
+    posts_liked = user_all[4]
 
     poststuff = [blog_id, user_id, text, str(time.asctime( time.localtime(time.time()))), 0, head]
     populateDB.insert('posts', poststuff)
@@ -219,7 +288,7 @@ def edit():
     print ('edit called...')
     user = session['user']
     viewer = populateDB.findInfo('users', user, 'username', fetchOne = True)
-    posts_liked = viewer[1]
+    posts_liked = viewer[4]
     text = functions.checkApos(request.form['text'])
     print(text)
     post_id = request.form['post_id']
@@ -244,6 +313,30 @@ def look():
         results = populateDB.findInfo('users', name, 'Username', asSubstring = True)
         print(results)
     return render_template("search.html", typer = type + 's', results = results)
+#If you want to put pic in db, make sure to add a pic field in db table
+#PM should ask mr. brown whether is ok use openCV:
+#stackoverflow://to.com/questions/41586429/opencv-saving-images-to-a-particular-folder-of-choice/41587740
+
+    #pic = request.form['pic']
+
+    # print ('blog_id')
+    # print (blog_id)
+    # print ('des')
+    # blog_id = populateDB.findInfo('blogs', user_id, 2)[0][0]
+    # print (blog_id)
+    # post_id = populateDB.findInfo('posts', user_id, 2)
+    # populateDB.insert('posts', [blog_id, user_id, des, str(time.asctime( time.localtime(time.time()))), 0, head])
+
+    ### html_str = """
+    ### <table border="2">
+    ###     <tr>
+    ###         <th>{{head}}</th>
+    ###     </tr>
+    ###     <tr>
+    ###         <td>{{des}}</td>
+    ###     </tr>
+    ### </table>
+    ### """
 
 
 @app.route('/profile', methods=['POST', 'GET'])
@@ -281,16 +374,15 @@ def blog():
     print ('blog')
     print (blog[3])
     print(posts[::-1])
-    return render_template('blog.html', username = userInfo[2], viewerPostLiked = viewer[1], blog = blog, posts=posts[::-1], owner=is_owner)
+    return render_template('blog.html', username = userInfo[2], viewerPostLiked = viewer[4], blog = blog, posts=posts[::-1], owner=is_owner)
 
 @app.route('/delete_blog', methods=['POST', 'GET'])
 def delete():
-    '''deletes existing blog'''
     blog_id = request.form['blog_id']
     users = populateDB.findInfo('users', 0, "UserID", notEqual =True)
     for user in users:
         user_id = users[0]
-        postsLiked = user[1]
+        postsLiked = user[4]
         listLikedPosts = postsLiked.split(',')
         postsLiked = ""
         for p in listLikedPosts:
@@ -302,6 +394,13 @@ def delete():
     populateDB.delete('blogs', 'BlogID', blog_id)
     return redirect(url_for('profile'))
 
+# def like():
+#     user = session['user']
+#     user_id = populateDB.findInfo('users', user, 'Username', fetchOne =  True)[0]
+#     post_id = request.form['post_id']
+#     votes = findInfo('posts', post_id, postID, fetchOnethOne=True)[1]
+#     print ('liked')
+#     #modify('posts', )
 
 @app.route('/usernav', methods=['POST', 'GET'])
 def users():
@@ -312,47 +411,69 @@ def users():
     return render_template('users.html', users=users)
 
 
+#link this to database
+@app.route('/photo')
+def photo():
+    return request.form['pic']
+
 @app.route('/food')
 def food():
-    '''category of blogs, returns html'''
     blogs = populateDB.findInfo('blogs','Food','Category')
     return render_template('food.html', blogs=blogs)
 
 @app.route('/tech')
 def tech():
-    '''category of blogs, returns html'''
     blogs = populateDB.findInfo('blogs','Tech','Category')
     return render_template('tech.html', blogs=blogs)
 
 @app.route('/sports')
 def sports():
-    '''category of blogs, returns html'''
     blogs = populateDB.findInfo('blogs','Sports','Category')
     return render_template('sports.html', blogs=blogs)
 
 @app.route('/news')
 def news():
-    '''category of blogs, returns html'''
     blogs = populateDB.findInfo('blogs','News','Category')
     return render_template('news.html', blogs=blogs)
 
 @app.route('/life')
 def life():
-    '''category of blogs, returns html'''
     blogs = populateDB.findInfo('blogs','Life','Category')
     return render_template('life.html', blogs=blogs)
 
 @app.route('/music')
 def music():
-    '''category of blogs, returns html'''
     blogs = populateDB.findInfo('blogs','Music','Category')
     return render_template('music.html', blogs=blogs)
 
 @app.route('/miscellaneous')
 def miscellaneous():
-    '''category of blogs, returns html'''
     blogs = populateDB.findInfo('blogs','Miscellaneous','Category')
     return render_template('miscellaneous.html', blogs=blogs)
+#@app.route('/redirect')
+#def findblog():
 
+#@app.route('/usernamedf')
+#def profile():
+   # user = session.get('username')
+   # defaultheading = 'Blog'
+    #defaultpost = 'Information about cool stuff'
+    #return render_template('profile.html', username = user, heading = defaultheading, blogs = defaultpost)
+
+
+###enter user's info to database
+##@app.route('/register')
+##def register():
+##	#if(request.args['usr'] != NULL):
+##	#	db = sqlite3.connect("user_data.db")
+##	#	c = db.cursor()
+##	#	file = open('data/data.csv')
+##	#	command = "CREATE TABLE users(name TEXT,password TEXT,id INTEGER)"
+##	#	c.execute(command)
+##	#	command2 = 'INSERT INTO users VALUES(?,?,?)'
+##	#	c.execute(command,(request.args['usr'],request.args['pwd'],0))
+##	#	return render_template('home.html')
+##	#else:
+##		return render_template('register.html')
 if __name__ == "__main__":
     app.run(debug=True)
