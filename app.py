@@ -219,6 +219,11 @@ def edit():
     is_owner = viewerID in blog
     return render_template('blog.html', username = viewer[2], viewerPostLiked = posts_liked, blog = blog, posts=posts[::-1], owner=is_owner)
 
+@app.route('/search', methods =['POST', 'GET'])
+def look():
+    name = request.form['search_value']
+    type = request.form['searchtype']
+    return render_template("search.html", typer = type, searcher = name)
 #If you want to put pic in db, make sure to add a pic field in db table
 #PM should ask mr. brown whether is ok use openCV:
 #stackoverflow://to.com/questions/41586429/opencv-saving-images-to-a-particular-folder-of-choice/41587740
@@ -296,10 +301,6 @@ def users():
     print (users)
     return render_template('users.html', users=users)
 
-@app.route('/search')
-def search():
-    flash("post not found")
-    return render_template('welcome.html',user=session['user'])
 
 #link this to database
 @app.route('/photo')
