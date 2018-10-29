@@ -18,8 +18,10 @@ def checkApos(string):
         i = string.find("'", i + 1)
         if i == -1: break
         aposIndexes.append(i)
+    j = 0
     for index in aposIndexes:
-        string = string[:index] + "'" + string[index:]
+        string = string[:index +j ] + "'" + string[index+ j:]
+        j += 1
     return string
 
 
@@ -104,9 +106,11 @@ def edit_post():
     '''allows the user to edit existing posts'''
     if 'user' in session:
         user = session['user']
-        user_id = populateDB.findInfo('users', user, 'Username', fetchOne =  True)[0]
+        user = populateDB.findInfo('users', user, 'Username', fetchOne =  True)
+        user_id = user[0]
         if request.form.get('edit_id'):
             post_id = request.form['edit_id']
+            print(post_id)
             # id = populateDB.findInfo('users', user, 2)[0]
             post = populateDB.findInfo('posts', post_id, 'postId')
             print ('post clicked')
@@ -139,22 +143,21 @@ def edit_post():
 
             blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
             posts = populateDB.findInfo('posts', postRec[1], 'blogID')
-            viewer = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
-            viewerID = viewer[0]
-            is_owner = viewerID in blog
-            return render_template('blog.html', username = viewer[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
+            owner = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
+            # viewerID = viewer[0]
+            is_owner = user_id == blog[1]
+            return render_template('blog.html', username = owner[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
         else:
             post_id = request.form['delete_id']
             postRec = populateDB.findInfo('posts', post_id, 'postID', fetchOne = True)
             blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
-            viewer = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
-            viewerID = viewer[0]
-            is_owner = viewerID in blog
+            owner = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
+            is_owner = user_id in blog
             populateDB.delete('posts', 'PostID', post_id)
             posts = populateDB.findInfo('posts', postRec[1], 'blogID')
             postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[4]
             populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
-            return render_template('blog.html', username = viewer[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
+            return render_template('blog.html', username = owner[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
     else:
         return redirect(url_for('home'))
 
@@ -197,8 +200,8 @@ def post():
     populateDB.insert('posts', poststuff)
     blog = populateDB.findInfo('blogs', blog_id, 'blogID', fetchOne =True)
     posts = populateDB.findInfo('posts', blog_id, 'blogID')
-    viewerID = user_all[0]
-    is_owner = viewerID in blog
+    # viewerID = user_all[0]
+    is_owner = user_id in blog
     return render_template('blog.html', username = user_all[2], viewerPostLiked = posts_liked, blog = blog, posts=posts[::-1], owner=is_owner)
 
 @app.route('/edit', methods=['POST', 'GET'])
@@ -209,6 +212,7 @@ def edit():
     viewer = populateDB.findInfo('users', user, 'username', fetchOne = True)
     posts_liked = viewer[4]
     text = checkApos(request.form['text'])
+    print(text)
     post_id = request.form['post_id']
     populateDB.modify('posts', 'Content', text, 'PostID', post_id)
     populateDB.modify('posts', 'Timestamp', str(time.asctime( time.localtime(time.time()))), 'PostID', post_id)
