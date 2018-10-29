@@ -138,7 +138,7 @@ def edit_post():
             else:
                 votes += 1
                 populateDB.modify('posts', 'VOTES', votes, 'PostID', post_id)
-                postsLiked += ',' + str(post_id)
+                postsLiked += str(post_id) + ','
                 populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
 
             blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
