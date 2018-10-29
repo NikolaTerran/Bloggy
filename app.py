@@ -59,15 +59,17 @@ def register():
     password = request.form['new_pwd'].strip()
     username= request.form['new_usr'].strip()
     pwdCopy = request.form['re_pwd'].strip()
-    username = checkApos(username)
-    try:
-            if password == pwdCopy:
-                populateDB.insert('users', ['profilepic', username, password, ''])
-                flash("registration complete, please re-enter your login info");
-            else:
-                flash('passwords do not match')
-    except:  # as e syntax added in ~python2.5
-        flash("your username is not unique; select a new one")
+    if username.find("'") == -1:
+        try:
+                if password == pwdCopy:
+                    populateDB.insert('users', ['profilepic', username, password, ''])
+                    flash("registration complete, please re-enter your login info");
+                else:
+                    flash('passwords do not match')
+        except:  # as e syntax added in ~python2.5
+            flash("your username is not unique; select a new one")
+    else
+        flash("pick a username without apostrophes")
     return redirect(url_for('home'))
 
 @app.route('/logout')
