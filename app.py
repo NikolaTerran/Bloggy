@@ -68,7 +68,7 @@ def register():
                     flash('passwords do not match')
         except:  # as e syntax added in ~python2.5
             flash("your username is not unique; select a new one")
-    else
+    else:
         flash("pick a username without apostrophes")
     return redirect(url_for('home'))
 
@@ -139,20 +139,22 @@ def edit_post():
 
             blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
             posts = populateDB.findInfo('posts', postRec[1], 'blogID')
-            userInfo = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
+            viewer = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
+            viewerID = viewer[0]
             is_owner = viewerID in blog
-            return render_template('blog.html', username = userInfo[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
+            return render_template('blog.html', username = viewer[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
         else:
             post_id = request.form['delete_id']
             postRec = populateDB.findInfo('posts', post_id, 'postID', fetchOne = True)
             blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
-            userInfo = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
+            viewer = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
+            viewerID = viewer[0]
             is_owner = viewerID in blog
             populateDB.delete('posts', 'PostID', post_id)
             posts = populateDB.findInfo('posts', postRec[1], 'blogID')
             postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[4]
             populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
-            return render_template('blog.html', username = userInfo[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
+            return render_template('blog.html', username = viewer[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
     else:
         return redirect(url_for('home'))
 
@@ -165,8 +167,8 @@ def create():
 def make():
     '''adds blog based on input from user to db'''
     user = session['user']
-    head = request.form['blogTitle']
-    des = request.form['blogDes']
+    head = checkApos(request.form['blogTitle'])
+    des = checkApos(request.form['blogDes'])
     cat = request.form['blogCat']
     print(head)
     print(des)
@@ -195,6 +197,7 @@ def post():
     populateDB.insert('posts', poststuff)
     blog = populateDB.findInfo('blogs', blog_id, 'blogID', fetchOne =True)
     posts = populateDB.findInfo('posts', blog_id, 'blogID')
+    viewerID = user_all[0]
     is_owner = viewerID in blog
     return render_template('blog.html', username = user_all[2], viewerPostLiked = posts_liked, blog = blog, posts=posts[::-1], owner=is_owner)
 
@@ -203,8 +206,8 @@ def edit():
     '''edits a post'''
     print ('edit called...')
     user = session['user']
-    user_all = populateDB.findInfo('users', user, 'username', fetchOne = True)
-    posts_liked = user_all[4]
+    viewer = populateDB.findInfo('users', user, 'username', fetchOne = True)
+    posts_liked = viewer[4]
     text = checkApos(request.form['text'])
     post_id = request.form['post_id']
     populateDB.modify('posts', 'Content', text, 'PostID', post_id)
@@ -212,8 +215,9 @@ def edit():
     blog_id = populateDB.findInfo('posts', post_id, 'postID', fetchOne =True)[1]
     blog = populateDB.findInfo('blogs', blog_id, 'blogID', fetchOne =True)
     posts = populateDB.findInfo('posts', blog_id, 'blogID')
+    viewerID = viewer[0]
     is_owner = viewerID in blog
-    return render_template('blog.html', username = user_all[2], viewerPostLiked = posts_liked, blog = blog, posts=posts[::-1], owner=is_owner)
+    return render_template('blog.html', username = viewer[2], viewerPostLiked = posts_liked, blog = blog, posts=posts[::-1], owner=is_owner)
 
 #If you want to put pic in db, make sure to add a pic field in db table
 #PM should ask mr. brown whether is ok use openCV:
