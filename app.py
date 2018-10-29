@@ -18,8 +18,10 @@ def checkApos(string):
         i = string.find("'", i + 1)
         if i == -1: break
         aposIndexes.append(i)
+    j = 0
     for index in aposIndexes:
-        string = string[:index] + "'" + string[index:]
+        string = string[:index +j ] + "'" + string[index+ j:]
+        j += 1
     return string
 
 
@@ -107,6 +109,7 @@ def edit_post():
         user_id = populateDB.findInfo('users', user, 'Username', fetchOne =  True)[0]
         if request.form.get('edit_id'):
             post_id = request.form['edit_id']
+            print(post_id)
             # id = populateDB.findInfo('users', user, 2)[0]
             post = populateDB.findInfo('posts', post_id, 'postId')
             print ('post clicked')
@@ -209,6 +212,7 @@ def edit():
     viewer = populateDB.findInfo('users', user, 'username', fetchOne = True)
     posts_liked = viewer[4]
     text = checkApos(request.form['text'])
+    print(text)
     post_id = request.form['post_id']
     populateDB.modify('posts', 'Content', text, 'PostID', post_id)
     populateDB.modify('posts', 'Timestamp', str(time.asctime( time.localtime(time.time()))), 'PostID', post_id)
