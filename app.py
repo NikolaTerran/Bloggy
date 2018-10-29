@@ -153,6 +153,16 @@ def edit_post():
             blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
             owner = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
             is_owner = user_id in blog
+            users = populateDB.findInfo('users', 0, "UserID", notEqual =True)
+            for user in users:
+                user_id = users[0]
+                postsLiked = user[4]
+                listLikedPosts = postsLiked.split(',')
+                listLikedPosts.remove(post_id)
+                postsLiked = ""
+                for p in listLikedPosts:
+                        postsLiked += p + ','
+                populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
             populateDB.delete('posts', 'PostID', post_id)
             posts = populateDB.findInfo('posts', postRec[1], 'blogID')
             postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[4]
@@ -294,20 +304,16 @@ def blog():
 @app.route('/delete_blog', methods=['POST', 'GET'])
 def delete():
     blog_id = request.form['blog_id']
-    num_users = populateDB.numRows('users')[0]
-    print ('num_users')
-    for user_id in range(1, num_users):
-        postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[4]
+    users = populateDB.findInfo('users', 0, "UserID", notEqual =True)
+    for user in users:
+        user_id = users[0]
+        postsLiked = user[4]
         listLikedPosts = postsLiked.split(',')
         postsLiked = ""
-        print (listLikedPosts)
         for p in listLikedPosts:
-            try:
-                blog_origin = populateDB.findInfo('posts', p, 'postID', fetchOne=True)[1]
-                if blog_id != blog_origin:
-                    postsLiked += p + ','
-            except:
-                print ('excepted')
+            blog_origin = populateDB.findInfo('posts', p, 'postID', fetchOne=True)[1]
+            if blog_id != blog_origin:
+                postsLiked += p + ','
         populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
     populateDB.delete('posts', 'BlogID', blog_id)
     populateDB.delete('blogs', 'BlogID', blog_id)

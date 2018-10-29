@@ -66,8 +66,3 @@ def modify(tableName, colToMod, newVal, filterIndex, filterValue):
 def delete(tableName, filterIndex, filterValue):
     c.execute(("DELETE FROM {0} WHERE {1} = '{2}'").format(tableName, filterIndex, filterValue))
     db.commit()
-
-def numRows(tableName):
-    c.execute(('SELECT Count(*) FROM {0}').format(tableName))
-    return c.fetchone()
-    db.commit()
