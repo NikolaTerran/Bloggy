@@ -227,7 +227,13 @@ def edit():
 def look():
     name = request.form['search_value']
     type = request.form['searchtype']
-    return render_template("search.html", typer = type, searcher = name)
+    if name == "Blog":
+        results = populateDB.findInfo(name, search_value, BlogTitle)
+    elif name == "Post":
+        results = populateDB.findinfo(name, search_value, Heading)
+    elif name == "User":
+        results = populateDB.findinfo(name, search_value, Username)
+    return render_template("search.html", typer = type, searcher = results)
 #If you want to put pic in db, make sure to add a pic field in db table
 #PM should ask mr. brown whether is ok use openCV:
 #stackoverflow://to.com/questions/41586429/opencv-saving-images-to-a-particular-folder-of-choice/41587740
