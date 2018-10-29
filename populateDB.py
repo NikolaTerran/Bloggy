@@ -26,6 +26,9 @@ def insert(tableName, info):
     for val in info:
         values += "'" + str(val) + "'" + ","
     values = values[:-1]
+    print("INSERT INTO {0}({1}) VALUES ({2})".format(tableName,
+                                                          colNames ,
+                                                          values  ))
     c.execute("INSERT INTO {0}({1}) VALUES ({2})".format(tableName,
                                                           colNames ,
                                                           values  ))
@@ -51,7 +54,6 @@ def findInfo(tableName,filterValue,colToFilt, sortCol = None, notEqual = None, f
 
     command = "SELECT * FROM  '{0}'  WHERE {1} {3}{4} '{2}'".format(tableName,colToFilt,filterValue, boolEqual, eq)
     command += sortQuery
-    print(command)
     c.execute(command)
 
     listInfo = []
@@ -67,9 +69,11 @@ def findInfo(tableName,filterValue,colToFilt, sortCol = None, notEqual = None, f
     return listInfo
 
 def modify(tableName, colToMod, newVal, filterIndex, filterValue):
+    print(("UPDATE {0} SET {1}='{2}' WHERE {3}='{4}'").format(tableName, colToMod, newVal, filterIndex, filterValue))
     c.execute(("UPDATE {0} SET {1}='{2}' WHERE {3}='{4}'").format(tableName, colToMod, newVal, filterIndex, filterValue))
     db.commit()
 
 def delete(tableName, filterIndex, filterValue):
+    print(("DELETE FROM {0} WHERE {1} = '{2}'").format(tableName, filterIndex, filterValue))
     c.execute(("DELETE FROM {0} WHERE {1} = '{2}'").format(tableName, filterIndex, filterValue))
     db.commit()
