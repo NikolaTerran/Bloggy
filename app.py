@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 #import db_builder
-from util import populateDB
-from util import functions#Contains functions to populate the database
+import populateDB
+import functions#Contains functions to populate the database
 
 from passlib.hash import sha256_crypt
 import time
@@ -314,10 +314,16 @@ def delete():
         listLikedPosts = postsLiked.split(',')
         postsLiked = ""
         for p in listLikedPosts:
-            blog_origin = populateDB.findInfo('posts', p, 'postID', fetchOne=True)[1]
-            if blog_id != blog_origin:
-                postsLiked += p + ','
-        populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
+            try:
+                blog_origin = populateDB.findInfo('posts', p, 'postID', fetchOne=True)[1]
+                if blog_id != blog_origin:
+                    postsLiked += p + ','
+            except:
+                print ('excepted')
+        try:
+            populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
+        except:
+            print ('excepted')
     populateDB.delete('posts', 'BlogID', blog_id)
     populateDB.delete('blogs', 'BlogID', blog_id)
     return redirect(url_for('profile'))
