@@ -29,8 +29,8 @@ def home():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     '''logs the user in by checking if their login info matches with registered user'''
-    username = request.form['usr']
-    password = request.form['pwd']
+    username = request.form['usr'].strip()
+    password = request.form['pwd'].strip()
     user_exists = populateDB.findInfo('users', functions.checkApos(username), 'username', fetchOne = True)
     if user_exists:
         print (sha256_crypt.verify(password, user_exists[3]))
@@ -81,15 +81,17 @@ def add_post():
 
 @app.route('/edit_post', methods=['POST', 'GET'])
 def edit_post():
-    '''allows the user to edit existing posts'''
+    '''allows the user to edit existing posts, delete them, like them, unlike them if owner, like/unlike if viewer'''
     if 'user' in session:
         user = session['user']
         user = populateDB.findInfo('users', user, 'Username', fetchOne =  True)
         user_id = user[0]
+        #edits existing post
         if request.form.get('edit_id'):
             post_id = request.form['edit_id']
             post = populateDB.findInfo('posts', post_id, 'postId')
             return render_template('edit_post.html',user = user, post=post[0])
+            #likes the post
         elif request.form.get('like_id'):
             post_id = request.form['like_id']
             postRec = populateDB.findInfo('posts', post_id, 'postID', fetchOne = True)
@@ -97,7 +99,7 @@ def edit_post():
             postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[4]
             listLikedPosts = postsLiked.split(',')
             hasLiked = post_id in listLikedPosts
-
+            #unlikes the post
             if hasLiked:
                 votes -= 1
                 populateDB.modify('posts', 'VOTES', votes, 'PostID', post_id)
@@ -115,16 +117,20 @@ def edit_post():
                 populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
 
             blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
+            print(blog)
             posts = populateDB.findInfo('posts', postRec[1], 'blogID')
+            print(posts)
             owner = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
             is_owner = user_id == blog[1]
+            print(owner)
             return render_template('blog.html', username = owner[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
         else:
+            #deletes post
             post_id = request.form['delete_id']
             postRec = populateDB.findInfo('posts', post_id, 'postID', fetchOne = True)
             blog = populateDB.findInfo('blogs', postRec[1], 'blogID', fetchOne =True)
             owner = populateDB.findInfo('users', blog[1], 'UserID', fetchOne = True)
-            is_owner = user_id in blog
+            is_owner = user_id == blog[1]
             users = populateDB.findInfo('users', 0, "UserID", notEqual =True)
             for user in users:
                 user_id = user[0]
@@ -213,6 +219,8 @@ def look():
     type = request.form['searchtype']
     if type == "Blog":
         results = populateDB.findInfo('blogs',name, 'BlogTitle', asSubstring = True)
+        print ('results here')
+        print (results)
     elif type == "Post":
         results = populateDB.findInfo('posts',name, 'Heading', asSubstring = True)
     else:
@@ -228,7 +236,6 @@ def profile():
         id = request.form['user_id']
         user = populateDB.findInfo('users', id, 'UserID', fetchOne = True)[2]
         is_owner = False
-        print ('user here')
         print (user)
     except:
         user = session['user']
@@ -250,7 +257,7 @@ def blog():
     viewer = populateDB.findInfo('users', user, 'username', fetchOne = True)
     viewerID = viewer[0]
     posts = populateDB.findInfo('posts', blog_id, 'blogId')
-    is_owner = viewerID in blog
+    is_owner = viewerID == blog[1]
     print ('blog')
     print (blog[3])
     print(posts[::-1])
