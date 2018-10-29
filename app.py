@@ -15,10 +15,10 @@ def checkApos(string):
     i = -1
     aposIndexes = []
     while True:
-        i = username.find("'", i + 1)
+        i = string.find("'", i + 1)
         if i == -1: break
-        aposIndex.append[i]
-    for index in aposIndex:
+        aposIndexes.append(i)
+    for index in aposIndexes:
         string = string[:index] + "'" + string[index:]
     return string
 
