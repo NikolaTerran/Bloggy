@@ -62,7 +62,7 @@ def register():
                     flash("registration complete, please re-enter your login info");
                 else:
                     flash('passwords do not match')
-        except:  # as e syntax added in ~python2.5
+        except:
             flash("your username is not unique; select a new one")
     else:
         flash("pick a username without apostrophes")
@@ -117,7 +117,7 @@ def edit_post():
             votes = postRec[5]
             print ('liked')
             print (votes)
-            postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[4]
+            postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[1]
             listLikedPosts = postsLiked.split(',')
             hasLiked = post_id in listLikedPosts
             #Handles liking
@@ -151,7 +151,7 @@ def edit_post():
             users = populateDB.findInfo('users', 0, "UserID", notEqual =True)
             for user in users:
                 user_id = user[0]
-                postsLiked = user[4]
+                postsLiked = user[1]
                 listLikedPosts = postsLiked.split(',')
                 if post_id in listLikedPosts:
                     listLikedPosts.remove(post_id)
@@ -164,7 +164,7 @@ def edit_post():
                 populateDB.modify('users', 'LikedPosts', postsLiked, 'UserId', user_id)
             populateDB.delete('posts', 'PostID', post_id)
             posts = populateDB.findInfo('posts', postRec[1], 'blogID')
-            postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[4]
+            postsLiked = populateDB.findInfo('users', user_id, 'UserID', fetchOne=True)[1]
             populateDB.modify('users', 'LikedPosts', postsLiked,'UserId', user_id)
             return render_template('blog.html', username = owner[2], viewerPostLiked = postsLiked, blog = blog, posts=posts[::-1], owner=is_owner)
     else:
@@ -203,7 +203,7 @@ def post():
     user = session['user']
     user_all = populateDB.findInfo('users', user, 'username', fetchOne = True)
     user_id = user_all[0]
-    posts_liked = user_all[4]
+    posts_liked = user_all[1]
 
     poststuff = [blog_id, user_id, text, str(time.asctime( time.localtime(time.time()))), 0, head]
     populateDB.insert('posts', poststuff)
@@ -219,7 +219,7 @@ def edit():
     print ('edit called...')
     user = session['user']
     viewer = populateDB.findInfo('users', user, 'username', fetchOne = True)
-    posts_liked = viewer[4]
+    posts_liked = viewer[1]
     text = functions.checkApos(request.form['text'])
     print(text)
     post_id = request.form['post_id']
@@ -244,30 +244,6 @@ def look():
         results = populateDB.findInfo('users', name, 'Username', asSubstring = True)
         print(results)
     return render_template("search.html", typer = type + 's', results = results)
-#If you want to put pic in db, make sure to add a pic field in db table
-#PM should ask mr. brown whether is ok use openCV:
-#stackoverflow://to.com/questions/41586429/opencv-saving-images-to-a-particular-folder-of-choice/41587740
-
-    #pic = request.form['pic']
-
-    # print ('blog_id')
-    # print (blog_id)
-    # print ('des')
-    # blog_id = populateDB.findInfo('blogs', user_id, 2)[0][0]
-    # print (blog_id)
-    # post_id = populateDB.findInfo('posts', user_id, 2)
-    # populateDB.insert('posts', [blog_id, user_id, des, str(time.asctime( time.localtime(time.time()))), 0, head])
-
-    ### html_str = """
-    ### <table border="2">
-    ###     <tr>
-    ###         <th>{{head}}</th>
-    ###     </tr>
-    ###     <tr>
-    ###         <td>{{des}}</td>
-    ###     </tr>
-    ### </table>
-    ### """
 
 
 @app.route('/profile', methods=['POST', 'GET'])
@@ -305,7 +281,7 @@ def blog():
     print ('blog')
     print (blog[3])
     print(posts[::-1])
-    return render_template('blog.html', username = userInfo[2], viewerPostLiked = viewer[4], blog = blog, posts=posts[::-1], owner=is_owner)
+    return render_template('blog.html', username = userInfo[2], viewerPostLiked = viewer[1], blog = blog, posts=posts[::-1], owner=is_owner)
 
 @app.route('/delete_blog', methods=['POST', 'GET'])
 def delete():
@@ -314,7 +290,7 @@ def delete():
     users = populateDB.findInfo('users', 0, "UserID", notEqual =True)
     for user in users:
         user_id = users[0]
-        postsLiked = user[4]
+        postsLiked = user[1]
         listLikedPosts = postsLiked.split(',')
         postsLiked = ""
         for p in listLikedPosts:
