@@ -265,6 +265,7 @@ def blog():
 
 @app.route('/delete_blog', methods=['POST', 'GET'])
 def delete():
+    '''deletes blog and all info within'''
     blog_id = request.form['blog_id']
     users = populateDB.findInfo('users', 0, "UserID", notEqual =True)
     if populateDB.findInfo('posts', blog_id, 'blogID'):
@@ -300,40 +301,48 @@ def users():
 #link this to database
 @app.route('/photo')
 def photo():
+    '''displays photo category'''
     return request.form['pic']
 
 @app.route('/food')
 def food():
+    '''displays food category'''
     blogs = populateDB.findInfo('blogs','Food','Category')
     return render_template('food.html', blogs=blogs)
 
 @app.route('/tech')
 def tech():
+    '''displays tech category'''
     blogs = populateDB.findInfo('blogs','Tech','Category')
     return render_template('tech.html', blogs=blogs)
 
 @app.route('/sports')
 def sports():
+    '''displays sports category'''
     blogs = populateDB.findInfo('blogs','Sports','Category')
     return render_template('sports.html', blogs=blogs)
 
 @app.route('/news')
 def news():
+    '''displays news category'''
     blogs = populateDB.findInfo('blogs','News','Category')
     return render_template('news.html', blogs=blogs)
 
 @app.route('/life')
 def life():
+    '''displays life category'''
     blogs = populateDB.findInfo('blogs','Life','Category')
     return render_template('life.html', blogs=blogs)
 
 @app.route('/music')
 def music():
+    '''displays music category'''
     blogs = populateDB.findInfo('blogs','Music','Category')
     return render_template('music.html', blogs=blogs)
 
 @app.route('/miscellaneous')
 def miscellaneous():
+    '''displays miscellaneous category'''
     blogs = populateDB.findInfo('blogs','Miscellaneous','Category')
     return render_template('miscellaneous.html', blogs=blogs)
 
